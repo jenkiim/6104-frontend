@@ -1,30 +1,144 @@
-import { Authing } from "./app";
+import { Authing, RespondingToTopic, Topicing } from "./app";
 import { AlreadyFriendsError, FriendNotFoundError, FriendRequestAlreadyExistsError, FriendRequestDoc, FriendRequestNotFoundError } from "./concepts/friending";
-import { PostAuthorNotMatchError, PostDoc } from "./concepts/posting";
+import { LabelAuthorNotMatchError, LabelDoc } from "./concepts/labeling";
+import { ResponseAuthorNotMatchError, ResponseDoc } from "./concepts/responding";
+import { NoSideFoundForUserError, SideDoc, UserAlreadyHasTopicSideError } from "./concepts/sideing";
+import { TopicAuthorNotMatchError, TopicDoc } from "./concepts/topicing";
 import { Router } from "./framework/router";
 
 /**
  * This class does useful conversions for the frontend.
- * For example, it converts a {@link PostDoc} into a more readable format for the frontend.
+ * For example, it converts a {@link ResponseDoc} into a more readable format for the frontend.
  */
 export default class Responses {
   /**
-   * Convert PostDoc into more readable format for the frontend by converting the author id into a username.
+   * Convert TopicDoc into more readable format for the frontend by converting the author id into a username.
    */
-  static async post(post: PostDoc | null) {
-    if (!post) {
-      return post;
+  static async topic(topic: TopicDoc | null) {
+    if (!topic) {
+      return topic;
     }
-    const author = await Authing.getUserById(post.author);
-    return { ...post, author: author.username };
+    const author = await Authing.getUserById(topic.author);
+    return { ...topic, author: author.username };
   }
 
   /**
-   * Same as {@link post} but for an array of PostDoc for improved performance.
+   * Same as {@link topic} but for an array of TopicDoc for improved performance.
    */
-  static async posts(posts: PostDoc[]) {
-    const authors = await Authing.idsToUsernames(posts.map((post) => post.author));
-    return posts.map((post, i) => ({ ...post, author: authors[i] }));
+  static async topics(topics: TopicDoc[]) {
+    const authors = await Authing.idsToUsernames(topics.map((topic) => topic.author));
+    return topics.map((topic, i) => ({ ...topic, author: authors[i] }));
+  }
+
+  /**
+   * Convert ResponseDoc into more readable format for the frontend by converting the author id into a username.
+   */
+  static async respond(response: ResponseDoc | null) {
+    if (!response) {
+      return response;
+    }
+    const author = await Authing.getUserById(response.author);
+    return { ...response, author: author.username };
+  }
+
+  /**
+   * Same as {@link respond} but for an array of ResponseDoc for improved performance.
+   */
+  static async responses(responses: ResponseDoc[]) {
+    const authors = await Authing.idsToUsernames(responses.map((response) => response.author));
+    return responses.map((response, i) => ({ ...response, author: authors[i] }));
+  }
+
+  /**
+   * Convert ResponseDoc into more readable format for the frontend by converting the author id into a username and target id into a title.
+   */
+  static async respondToTopic(response: ResponseDoc | null) {
+    if (!response) {
+      return response;
+    }
+    const author = await Authing.getUserById(response.author);
+    const topic = await Topicing.getTopicById(response.target);
+    return { ...response, author: author.username, isse: topic.title };
+  }
+
+  /**
+   * Same as {@link respondToTopic} but for an array of ResponseDoc for improved performance.
+   */
+  static async responsesToTopic(responses: ResponseDoc[]) {
+    const authors = await Authing.idsToUsernames(responses.map((response) => response.author));
+    const topics = await Topicing.idsToTitles(responses.map((response) => response.target));
+    return responses.map((response, i) => ({ ...response, author: authors[i], issue: topics[i] }));
+  }
+
+  /**
+   * Convert SideDoc into more readable format for the frontend by converting the author id into a username.
+   */
+  static async side(side: SideDoc | null) {
+    if (!side) {
+      return side;
+    }
+    const author = await Authing.getUserById(side.user);
+    const topic = await Topicing.getTopicById(side.item);
+    return { ...side, user: author.username, topic: topic.title };
+  }
+
+  /**
+   * Same as {@link side} but for an array of SideDoc for improved performance.
+   */
+  static async sides(sides: SideDoc[]) {
+    const authors = await Authing.idsToUsernames(sides.map((side) => side.user));
+    const topics = await Topicing.idsToTitles(sides.map((side) => side.item));
+    return sides.map((side, i) => ({ ...side, user: authors[i], topic: topics[i] }));
+  }
+
+  /**
+   * Convert LabelDoc into more readable format for the frontend by converting the author id into a username and the topic ids into titles.
+   */
+  static async topicLabel(label: LabelDoc | null) {
+    if (!label) {
+      return label;
+    }
+    const author = await Authing.getUserById(label.author);
+    const items = await Topicing.idsToTitles(label.items);
+    return { ...label, author: author.username, topicTitles: items };
+  }
+
+  /**
+   * Same as {@link topicLabel} but for an array of LabelDoc for improved performance.
+   */
+  static async topicLabels(labels: LabelDoc[]) {
+    const all_topics: string[][] = [];
+    for (const label of labels) {
+      const items = await Topicing.idsToTitles(label.items);
+      all_topics.push(items);
+    }
+    const authors = await Authing.idsToUsernames(labels.map((label) => label.author));
+    return labels.map((label, i) => ({ ...label, author: authors[i], topicTitles: all_topics[i] }));
+  }
+
+  /**
+   * Convert LabelDoc into more readable format for the frontend by converting the author id into a username.
+   */
+  static async responseLabel(label: LabelDoc | null) {
+    if (!label) {
+      return label;
+    }
+    const author = await Authing.getUserById(label.author);
+    const items = await RespondingToTopic.idsToTitles(label.items);
+    return { ...label, author: author.username, responseTitles: items };
+  }
+
+  /**
+   * Same as {@link responseLabel} but for an array of LabelDoc for improved performance.
+   */
+  static async responseLabels(labels: LabelDoc[]) {
+    const all_responses: string[][] = [];
+    for (const label of labels) {
+      const items = await RespondingToTopic.idsToTitles(label.items);
+      all_responses.push(items);
+    }
+    const authors = await Authing.idsToUsernames(labels.map((label) => label.author));
+    return labels.map((label, i) => ({ ...label, author: authors[i], responseTitles: all_responses[i] }));
   }
 
   /**
@@ -39,9 +153,32 @@ export default class Responses {
   }
 }
 
-Router.registerError(PostAuthorNotMatchError, async (e) => {
+Router.registerError(TopicAuthorNotMatchError, async (e) => {
+  const username = (await Authing.getUserById(e.author)).username;
+  // const topic = (await Topicing.getTopicById(e._id)).title;
+  return e.formatWith(username, e._id);
+});
+
+Router.registerError(ResponseAuthorNotMatchError, async (e) => {
   const username = (await Authing.getUserById(e.author)).username;
   return e.formatWith(username, e._id);
+});
+
+Router.registerError(NoSideFoundForUserError, async (e) => {
+  const username = (await Authing.getUserById(e.author)).username;
+  const topic = (await Topicing.getTopicById(e._id)).title;
+  return e.formatWith(username, topic);
+});
+
+Router.registerError(UserAlreadyHasTopicSideError, async (e) => {
+  const username = (await Authing.getUserById(e.author)).username;
+  const topic = (await Topicing.getTopicById(e._id)).title;
+  return e.formatWith(username, topic);
+});
+
+Router.registerError(LabelAuthorNotMatchError, async (e) => {
+  const username = (await Authing.getUserById(e.author)).username;
+  return e.formatWith(username, e.title);
 });
 
 Router.registerError(FriendRequestAlreadyExistsError, async (e) => {
