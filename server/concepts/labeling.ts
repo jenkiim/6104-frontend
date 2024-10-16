@@ -5,7 +5,7 @@ import { BadValuesError, NotAllowedError, NotFoundError } from "./errors";
 
 export interface LabelDoc extends BaseDoc {
   author: ObjectId;
-  title: String;
+  title: string;
   items: ObjectId[];
 }
 
@@ -51,7 +51,7 @@ export default class LabelingConcept {
     if (!label) {
       throw new LabelNotFoundError(title);
     }
-    const check_current_items = label.items.map(item => item.toString());
+    const check_current_items = label.items.map((item) => item.toString());
     const updated_items = label.items;
     if (!check_current_items.includes(item.toString())) {
       updated_items.push(item);
@@ -67,11 +67,11 @@ export default class LabelingConcept {
     if (!label) {
       throw new LabelNotFoundError(title);
     }
-    const check_current_items = label.items.map(item => item.toString());
+    const check_current_items = label.items.map((item) => item.toString());
     if (!check_current_items.includes(item.toString())) {
       throw new NotAllowedError(`Label ${title} isn't attached to the item!`);
     }
-    const updated_items = label.items.filter(currentItem => currentItem.toString() !== item.toString());
+    const updated_items = label.items.filter((currentItem) => currentItem.toString() !== item.toString());
     console.log(updated_items);
     await this.labels.partialUpdateOne({ title }, { items: updated_items });
     return { msg: `Label ${title} successfully removed from item!`, label: await this.labels.readOne({ title }) };
@@ -84,11 +84,11 @@ export default class LabelingConcept {
     }
     return { msg: `Successfully found all items with label ${title}!`, items: tag.items };
   }
-  
+
   async filterByLabelFromGiven(given: ObjectId[], title: string) {
-    const givenString = given.map(item => item.toString());
+    const givenString = given.map((item) => item.toString());
     const items = (await this.getItems(title)).items;
-    const filtered_items = items.filter(item => givenString.includes(item.toString()));
+    const filtered_items = items.filter((item) => givenString.includes(item.toString()));
     return filtered_items;
   }
 
@@ -126,9 +126,7 @@ export class LabelAuthorNotMatchError extends NotFoundError {
 }
 
 export class LabelNotFoundError extends NotAllowedError {
-  constructor(
-    public readonly title: string,
-  ) {
+  constructor(public readonly title: string) {
     super(`Label ${title} does not exist!`);
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-finally */
 import { ObjectId } from "mongodb";
 
 import DocCollection, { BaseDoc } from "../framework/doc";
@@ -24,7 +25,7 @@ export default class TopicingConcept {
 
   async create(author: ObjectId, title: string, description: string) {
     await this.assertGoodTitle(title);
-    const _id = await this.topics.createOne({ author, title, description});
+    const _id = await this.topics.createOne({ author, title, description });
     return { msg: "Topic successfully created!", topic: await this.topics.readOne({ _id }) };
   }
 
@@ -48,7 +49,7 @@ export default class TopicingConcept {
 
   async searchTopicTitles(title: string) {
     const topics = await this.topics.readMany({
-      title: { $regex: title, $options: "i" } // case-insensitive
+      title: { $regex: title, $options: "i" }, // case-insensitive
     });
     return topics;
   }

@@ -55,7 +55,6 @@ export default class SideingConcept {
   async update(user: ObjectId, item: ObjectId, newside?: string) {
     if (newside) {
       await this.sides.partialUpdateOne({ user, item }, { degree: await this.assertDegree(newside) });
-
     }
     return { msg: "Response successfully updated!" };
   }
@@ -67,7 +66,7 @@ export default class SideingConcept {
     }
   }
 
-  private async assertDegree(degree: string){
+  private async assertDegree(degree: string) {
     if (!Object.values(OpinionDegree).includes(degree as OpinionDegree)) {
       throw new NotFoundError(`Degree ${degree} is not a valid side!`);
     }

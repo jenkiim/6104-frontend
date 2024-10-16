@@ -25,7 +25,7 @@ export default class RespondingConcept {
 
   async create(author: ObjectId, title: string, content: string, target: ObjectId) {
     await this.assertGoodResponse(title, content);
-    const _id = await this.responses.createOne({ author, title, content, target});
+    const _id = await this.responses.createOne({ author, title, content, target });
     const response = await this.responses.readOne({ _id });
     if (!response) {
       throw new NotFoundError(`Response wasn't created correctly!`);
@@ -37,7 +37,7 @@ export default class RespondingConcept {
     // Returns all responses! You might want to page for better client performance
     return await this.responses.readMany({}, { sort: { _id: -1 } });
   }
-//////////////////////////////////
+
   async getByAuthor(author: ObjectId) {
     return await this.responses.readMany({ author });
   }
@@ -47,7 +47,7 @@ export default class RespondingConcept {
   }
 
   async getByAuthorAndTarget(author: ObjectId | undefined, target: ObjectId | undefined) {
-    const query: { author?: ObjectId; target?: ObjectId } = { };
+    const query: { author?: ObjectId; target?: ObjectId } = {};
     if (author !== undefined) {
       query.author = author;
     }

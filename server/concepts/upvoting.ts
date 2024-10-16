@@ -24,7 +24,7 @@ export default class UpvotingConcept {
   }
 
   async create(item: ObjectId) {
-    const _id = await this.upvotes.createOne({ item, upvotes: [], downvotes: [], count: 0});
+    const _id = await this.upvotes.createOne({ item, upvotes: [], downvotes: [], count: 0 });
     return { msg: "Upvote Item successfully created!", upvote: await this.upvotes.readOne({ _id }) };
   }
 
@@ -45,12 +45,12 @@ export default class UpvotingConcept {
       if (downvotesString.includes(user.toString())) {
         const updatedDownvotes = upvote.downvotes.filter((downvote) => downvote.toString() !== user.toString());
         currentCount += 2;
-        await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes});
+        await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes });
       } else {
         currentCount++;
       }
       const updatedUpvotes = upvote.upvotes.concat(user);
-      await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes , count: currentCount });
+      await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes, count: currentCount });
     }
     return { msg: `Upvoted response with title ${title} and id ${item} successfully!` };
   }
@@ -72,12 +72,12 @@ export default class UpvotingConcept {
       if (upvotesString.includes(user.toString())) {
         const updatedUpvotes = downvote.upvotes.filter((upvote) => upvote.toString() !== user.toString());
         currentCount -= 2;
-        await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes});
+        await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes });
       } else {
         currentCount--;
       }
       const updatedDownvotes = downvote.downvotes.concat(user);
-      await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes , count: currentCount });
+      await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes, count: currentCount });
     }
     return { msg: `Downvoted response with title ${title} and id ${item} successfully!` };
   }
@@ -98,13 +98,13 @@ export default class UpvotingConcept {
     if (downvotesString.includes(user.toString())) {
       const updatedDownvotes = unvote.downvotes.filter((downvote) => downvote.toString() !== user.toString());
       currentCount++;
-      await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes , count: currentCount });
+      await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes, count: currentCount });
     }
     // if user was upvoting, remove upvote
     if (upvotesString.includes(user.toString())) {
       const updatedUpvotes = unvote.upvotes.filter((upvote) => upvote.toString() !== user.toString());
       currentCount--;
-      await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes, count: currentCount});
+      await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes, count: currentCount });
     }
     return { msg: `Unvoted response with title ${title} and id ${item} successfully!` };
   }
@@ -123,7 +123,7 @@ export default class UpvotingConcept {
 
   async sortItemsByCount(items: ObjectId[]) {
     const itemIds = await this.upvotes.getSortedByUpvoteCountForItem(items);
-    for (let id of items) {
+    for (const id of items) {
       if (!itemIds.includes(id)) {
         itemIds.push(id);
       }
@@ -133,7 +133,7 @@ export default class UpvotingConcept {
 
   async sortItemsByControversy(items: ObjectId[]) {
     const itemIds = await this.upvotes.getSortedByControversyForItems(items);
-    for (let id of items) {
+    for (const id of items) {
       if (!itemIds.includes(id)) {
         itemIds.push(id);
       }
