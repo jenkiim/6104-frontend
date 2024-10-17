@@ -6,7 +6,7 @@ import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
 const props = defineProps(["response"]);
-const emit = defineEmits(["refreshResponses", "editResponse"]);
+const emit = defineEmits(["refreshResponses"]);
 const { currentUsername } = storeToRefs(useUserStore());
 let responses = ref<Array<Record<string, string>>>([]);
 
@@ -47,15 +47,12 @@ function navigateToAddResponse(id: string) {
     <div class="base">
       <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
       <menu v-if="props.response.author == currentUsername">
-        <li><button class="btn-small pure-button" @click="emit('editResponse', props.response._id)">Edit</button></li>
         <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
       </menu>
     </div>
     <section class="responses" v-if="responses.length !== 0">
       <article v-for="response in responses" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
-        <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
-        <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
       </article>
     </section>
   </div>

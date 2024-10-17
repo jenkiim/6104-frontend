@@ -135,21 +135,21 @@ class Routes {
     return { msg: created.msg, response: await Responses.respondToTopic(created.response) };
   }
 
-  @Router.patch("/responses/topic/:id/title")
-  async updateResponseTitleToTopic(session: SessionDoc, id: string, title?: string) {
-    const user = Sessioning.getUser(session);
-    const oid = new ObjectId(id);
-    await RespondingToTopic.assertAuthorIsUser(oid, user);
-    return await RespondingToTopic.updateTitle(oid, title);
-  }
+  // @Router.patch("/responses/topic/:id/title")
+  // async updateResponseTitleToTopic(session: SessionDoc, id: string, title?: string) {
+  //   const user = Sessioning.getUser(session);
+  //   const oid = new ObjectId(id);
+  //   await RespondingToTopic.assertAuthorIsUser(oid, user);
+  //   return await RespondingToTopic.updateTitle(oid, title);
+  // }
 
-  @Router.patch("/responses/topic/:id/content")
-  async updateResponseToTopic(session: SessionDoc, id: string, content?: string) {
-    const user = Sessioning.getUser(session);
-    const oid = new ObjectId(id);
-    await RespondingToTopic.assertAuthorIsUser(oid, user);
-    return await RespondingToTopic.updateContent(oid, content);
-  }
+  // @Router.patch("/responses/topic/:id/content")
+  // async updateResponseToTopic(session: SessionDoc, id: string, content?: string) {
+  //   const user = Sessioning.getUser(session);
+  //   const oid = new ObjectId(id);
+  //   await RespondingToTopic.assertAuthorIsUser(oid, user);
+  //   return await RespondingToTopic.updateContent(oid, content);
+  // }
 
   @Router.delete("/responses/topic/:id")
   async deleteResponseToTopic(session: SessionDoc, id: string) {
@@ -189,21 +189,21 @@ class Routes {
     return { msg: created.msg, response: await Responses.respond(created.response) };
   }
 
-  @Router.patch("/responses/response/:id/title")
-  async updateResponseTitleToResponse(session: SessionDoc, id: string, title?: string) {
-    const user = Sessioning.getUser(session);
-    const oid = new ObjectId(id);
-    await RespondingToResponse.assertAuthorIsUser(oid, user);
-    return await RespondingToResponse.updateTitle(oid, title);
-  }
+  // @Router.patch("/responses/response/:id/title")
+  // async updateResponseTitleToResponse(session: SessionDoc, id: string, title?: string) {
+  //   const user = Sessioning.getUser(session);
+  //   const oid = new ObjectId(id);
+  //   await RespondingToResponse.assertAuthorIsUser(oid, user);
+  //   return await RespondingToResponse.updateTitle(oid, title);
+  // }
 
-  @Router.patch("/responses/response/:id/content")
-  async updateResponseToResponse(session: SessionDoc, id: string, content?: string) {
-    const user = Sessioning.getUser(session);
-    const oid = new ObjectId(id);
-    await RespondingToResponse.assertAuthorIsUser(oid, user);
-    return await RespondingToResponse.updateContent(oid, content);
-  }
+  // @Router.patch("/responses/response/:id/content")
+  // async updateResponseToResponse(session: SessionDoc, id: string, content?: string) {
+  //   const user = Sessioning.getUser(session);
+  //   const oid = new ObjectId(id);
+  //   await RespondingToResponse.assertAuthorIsUser(oid, user);
+  //   return await RespondingToResponse.updateContent(oid, content);
+  // }
 
   @Router.delete("/responses/response/:id")
   async deleteResponseToResponse(session: SessionDoc, id: string) {

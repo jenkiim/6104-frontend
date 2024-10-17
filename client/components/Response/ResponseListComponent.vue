@@ -4,7 +4,6 @@ import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import CreateResponseForm from "./CreateResponseForm.vue";
-import EditResponseForm from "./EditResponseForm.vue";
 import ResponseComponent from "./ResponseComponent.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
@@ -12,8 +11,6 @@ const props = defineProps(["topic"]);
 
 const loaded = ref(false);
 let responses = ref<Array<Record<string, string>>>([]);
-let editing = ref("");
-// let searchText = ref("");
 
 async function getResponses(topic: string) {
   let query: Record<string, string> = { topic };
@@ -24,15 +21,6 @@ async function getResponses(topic: string) {
     return;
   }
   responses.value = topicResults;
-}
-
-// function navigateToTopic(title: string) {
-//   void router.push({ name: "TopicPage", params: { title: title } });
-//   // this.$router.push({ name: "TopicPage", params: { title: this.topic.title } });
-// }
-
-function updateEditing(id: string) {
-  editing.value = id;
 }
 
 onBeforeMount(async () => {
@@ -49,16 +37,10 @@ onBeforeMount(async () => {
   </section>
   <div class="row">
     <h2>Responses:</h2>
-    <!-- <SearchTopicForm @getTopicsByText="getTopics" /> -->
   </div>
   <section class="responses" v-if="loaded && responses.length !== 0">
     <article v-for="response in responses" :key="response._id">
-      <!-- <div @click="navigateToTopic(response.title)"> -->
-      <!-- <ResponseComponent :response="response" @refreshResponses="getResponses(props.topic)" /> -->
-      <ResponseComponent v-if="editing !== response._id" :response="response" @refreshResponses="getResponses(props.topic)" @editResponse="updateEditing" />
-      <EditResponseForm v-else :response="response" @refreshResponses="getResponses(props.topic)" @editResponse="updateEditing" />
-      <!-- </div> -->
-      <!-- <EditResponseForm v-else :response="response" @refreshResponses="getResponses" @editResponse="updateEditing" /> -->
+      <ResponseComponent :response="response" @refreshResponses="getResponses(props.topic)" />
     </article>
   </section>
   <p v-else-if="loaded">No responses found</p>

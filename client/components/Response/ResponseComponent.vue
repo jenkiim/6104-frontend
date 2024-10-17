@@ -7,7 +7,7 @@ import { fetchy } from "../../utils/fetchy";
 import ResponseToResponseComponent from "../ResponsesToResponses/ResponseToResponseComponent.vue";
 
 const props = defineProps(["response"]);
-const emit = defineEmits(["refreshResponses", "editResponse", "addResponse"]);
+const emit = defineEmits(["refreshResponses"]);
 const { currentUsername } = storeToRefs(useUserStore());
 const responsesToCurrent = ref<Array<Record<string, string>>>([]);
 
@@ -49,23 +49,13 @@ function navigateToAddResponse(id: string) {
   <div class="base">
     <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
     <menu class="buttons" v-if="props.response.author == currentUsername">
-      <li><button class="btn-small pure-button" @click="emit('editResponse', props.response._id)">Edit</button></li>
       <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
     </menu>
     <section class="responses" v-if="responsesToCurrent.length !== 0">
       <article v-for="response in responsesToCurrent" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
-        <!-- @editResponse="updateEditing" -->
-        <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
-        <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
       </article>
     </section>
-    <!-- @refreshResponses="getResponses(props.response._id)" -->
-    <!-- <article class="timestamp">
-      <p v-if="props.response.dateCreated !== props.response.dateUpdated">Edited on: {{ formatDate(props.response.dateUpdated) }}</p>
-      <p>Created on: {{ formatDate(props.response.dateCreated) }}</p>
-    </article> -->
-    <!-- <button @click="navigateToComments(props.response._id)"><img src="../../assets/images/comment_button.png" /></button> -->
   </div>
 </template>
 
