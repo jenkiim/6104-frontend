@@ -1,0 +1,117 @@
+<script setup lang="ts">
+import router from "@/router";
+import { ref } from "vue";
+import { fetchy } from "../utils/fetchy";
+
+const props = defineProps(["id"]);
+const title = ref("");
+const content = ref("");
+const emit = defineEmits(["addResponse", "refreshResponses"]);
+
+// const getDescription = async (search: string) => {
+//   let query: Record<string, string> = { search };
+//   let topic;
+//   console.log("search", search);
+//   console.log("query", query);
+//   try {
+//     topic = await fetchy("/api/topics", "GET", { query });
+//   } catch (_) {
+//     return;
+//   }
+//   console.log("topic", topic);
+//   topic = topic[0];
+//   description.value = topic.description;
+//   loaded.value = true;
+// };
+
+// onBeforeMount(async () => {
+//   await getDescription(props.id);
+// });
+
+const addResponse = async (title: string, content: string) => {
+  try {
+    await fetchy(`/api/responses/response/${props.id}`, "POST", { body: { title: title, content: content } });
+  } catch (e) {
+    return;
+  }
+  emit("refreshResponses");
+  // void router.push({ name: "TopicView", params: { id: props.id } }); //////// will error if the target isn't a topic
+  router.go(-1);
+};
+
+// const emptyForm = () => {
+//   title.value = "";
+//   content.value = "";
+// };
+</script>
+
+<template>
+  <main>
+    <h1>Write a response to {{ props.id }}!</h1>
+    <form @submit.prevent="addResponse(title, content)">
+      <textarea id="content" v-model="title" placeholder="Title" required> </textarea>
+      <textarea id="content" v-model="content" placeholder="Content" required> </textarea>
+      <div class="base">
+        <menu>
+          <li><button class="btn-small pure-button-primary pure-button" type="submit">Respond</button></li>
+        </menu>
+      </div>
+    </form>
+  </main>
+</template>
+
+<style scoped>
+h1 {
+  text-align: center;
+}
+
+p {
+  padding: 2em;
+}
+
+form {
+  background-color: var(--base-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  height: 6em;
+  border-radius: 4px;
+  resize: none;
+}
+
+p {
+  margin: 0em;
+}
+
+.author {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+menu {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+.base {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.timestamp {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9em;
+  font-style: italic;
+}
+</style>

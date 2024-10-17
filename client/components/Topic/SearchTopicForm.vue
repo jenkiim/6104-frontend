@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const author = ref("");
-const emit = defineEmits(["getPostsByAuthor"]);
+const text = ref("");
+const emit = defineEmits(["getTopicsByText"]);
 </script>
 
 <template>
-  <form @submit.prevent="emit('getPostsByAuthor', author)" class="pure-form">
+  <form @submit.prevent="emit('getTopicsByText', text)" class="pure-form">
     <fieldset>
-      <legend>Search by Author</legend>
-      <input id="author" type="text" v-model="author" placeholder="Username" />
+      <!-- <legend>Search</legend> -->
+      <input id="text" type="text" v-model="text" placeholder="Search" />
       <button type="submit" class="pure-button pure-button-primary">Search</button>
     </fieldset>
   </form>

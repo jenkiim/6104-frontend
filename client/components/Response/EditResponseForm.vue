@@ -3,32 +3,32 @@ import { ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import { formatDate } from "../../utils/formatDate";
 
-const props = defineProps(["post"]);
-const content = ref(props.post.content);
-const emit = defineEmits(["editPost", "refreshPosts"]);
+const props = defineProps(["response"]);
+const title = ref(props.response.title);
+const emit = defineEmits(["editResponse", "refreshResponses"]);
 
-const editPost = async (content: string) => {
+const editResponse = async (title: string) => {
   try {
-    await fetchy(`/api/posts/${props.post._id}`, "PATCH", { body: { content: content } });
+    await fetchy(`/api/responses/topic/${props.response._id}/title`, "PATCH", { body: { title: title } });
   } catch (e) {
     return;
   }
-  emit("editPost");
-  emit("refreshPosts");
+  emit("editResponse");
+  emit("refreshResponses");
 };
 </script>
 
 <template>
-  <form @submit.prevent="editPost(content)">
-    <p class="author">{{ props.post.author }}</p>
-    <textarea id="content" v-model="content" placeholder="Create a post!" required> </textarea>
+  <form @submit.prevent="editResponse(title)">
+    <p class="author">{{ props.response.author }}</p>
+    <textarea id="content" v-model="title" placeholder="New title..." required> </textarea>
     <div class="base">
       <menu>
         <li><button class="btn-small pure-button-primary pure-button" type="submit">Save</button></li>
-        <li><button class="btn-small pure-button" @click="emit('editPost')">Cancel</button></li>
+        <li><button class="btn-small pure-button" @click="emit('editResponse')">Cancel</button></li>
       </menu>
-      <p v-if="props.post.dateCreated !== props.post.dateUpdated" class="timestamp">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
-      <p v-else class="timestamp">Created on: {{ formatDate(props.post.dateCreated) }}</p>
+      <p v-if="props.response.dateCreated !== props.response.dateUpdated" class="timestamp">Edited on: {{ formatDate(props.response.dateUpdated) }}</p>
+      <p v-else class="timestamp">Created on: {{ formatDate(props.response.dateCreated) }}</p>
     </div>
   </form>
 </template>

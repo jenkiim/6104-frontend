@@ -2,10 +2,12 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
+import AddResponseView from "../views/AddResponseView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
+import TopicView from "../views/TopicView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +22,18 @@ const router = createRouter({
       name: "Settings",
       component: SettingView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: "/topic/:title", // Add this route for the topic page
+      name: "TopicPage",
+      component: TopicView,
+      props: true,
+    },
+    {
+      path: "/response/:id", // Add this route for the topic page
+      name: "AddResponsePage",
+      component: AddResponseView,
+      props: true,
     },
     {
       path: "/login",

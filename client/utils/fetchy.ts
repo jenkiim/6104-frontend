@@ -28,6 +28,7 @@ export async function fetchy(
 
   const queryString = new URLSearchParams(options.query).toString();
   const fullUrl = `${url}?${queryString}`;
+  // const fullUrl = queryString ? `${url}?${queryString}` : url;
 
   if ((method === "GET" || method === "DELETE") && options.body) {
     throw new Error(`Cannot have a body with a ${method} request`);

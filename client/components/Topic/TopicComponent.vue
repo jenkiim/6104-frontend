@@ -4,31 +4,31 @@ import { formatDate } from "@/utils/formatDate";
 import { storeToRefs } from "pinia";
 import { fetchy } from "../../utils/fetchy";
 
-const props = defineProps(["post"]);
-const emit = defineEmits(["editPost", "refreshPosts"]);
+const props = defineProps(["topic"]);
+const emit = defineEmits(["refreshTopics"]);
 const { currentUsername } = storeToRefs(useUserStore());
 
-const deletePost = async () => {
+const deleteTopic = async () => {
   try {
-    await fetchy(`/api/posts/${props.post._id}`, "DELETE");
+    await fetchy(`/api/topic/${props.topic.title}`, "DELETE");
   } catch {
     return;
   }
-  emit("refreshPosts");
+  emit("refreshTopics");
 };
 </script>
 
 <template>
-  <p class="author">{{ props.post.author }}</p>
-  <p>{{ props.post.content }}</p>
+  <h1>{{ props.topic.title }}</h1>
+  <p class="author">{{ props.topic.author }}</p>
   <div class="base">
-    <menu v-if="props.post.author == currentUsername">
-      <li><button class="btn-small pure-button" @click="emit('editPost', props.post._id)">Edit</button></li>
-      <li><button class="button-error btn-small pure-button" @click="deletePost">Delete</button></li>
+    <menu v-if="props.topic.author == currentUsername">
+      <!-- <li><button class="btn-small pure-button" @click="emit('editTopic', props.topic._id)">Edit</button></li> -->
+      <li><button class="button-error btn-small pure-button" @click="deleteTopic">Delete</button></li>
     </menu>
     <article class="timestamp">
-      <p v-if="props.post.dateCreated !== props.post.dateUpdated">Edited on: {{ formatDate(props.post.dateUpdated) }}</p>
-      <p v-else>Created on: {{ formatDate(props.post.dateCreated) }}</p>
+      <!-- <p v-if="props.topic.dateCreated !== props.topic.dateUpdated">Edited on: {{ formatDate(props.topic.dateUpdated) }}</p> -->
+      <p>Created on: {{ formatDate(props.topic.dateCreated) }}</p>
     </article>
   </div>
 </template>
@@ -38,8 +38,11 @@ p {
   margin: 0em;
 }
 
+h1 {
+  font-size: 1.5em;
+}
+
 .author {
-  font-weight: bold;
   font-size: 1.2em;
 }
 

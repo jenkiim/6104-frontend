@@ -1,0 +1,114 @@
+<script setup lang="ts">
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
+import { onBeforeMount, ref } from "vue";
+import router from "../../router";
+import { fetchy } from "../../utils/fetchy";
+import ResponseToResponseComponent from "../ResponsesToResponses/ResponseToResponseComponent.vue";
+
+const props = defineProps(["response"]);
+const emit = defineEmits(["refreshResponses", "editResponse", "addResponse"]);
+const { currentUsername } = storeToRefs(useUserStore());
+const responsesToCurrent = ref<Array<Record<string, string>>>([]);
+
+const deleteResponse = async () => {
+  try {
+    await fetchy(`/api/responses/topic/${props.response._id}`, "DELETE");
+  } catch {
+    return;
+  }
+  emit("refreshResponses");
+};
+
+const getResponses = async (targetId: string) => {
+  let query: Record<string, string> = targetId !== undefined ? { targetId } : {};
+  let responseResults;
+  try {
+    responseResults = await fetchy("/api/responses/response", "GET", { query });
+  } catch (_) {
+    return;
+  }
+  console.log("responseResults", responseResults);
+  responsesToCurrent.value = responseResults;
+};
+
+onBeforeMount(async () => {
+  console.log("props.response._id", props.response._id);
+  await getResponses(props.response._id);
+});
+
+function navigateToAddResponse(id: string) {
+  void router.push({ name: "AddResponsePage", params: { id: id } });
+}
+</script>
+
+<template>
+  <h1>{{ props.response.title }}</h1>
+  <p class="author">{{ props.response.author }}</p>
+  <p>{{ props.response.content }}</p>
+  <div class="base">
+    <menu class="buttons" v-if="props.response.author == currentUsername">
+      <li><button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button></li>
+      <li><button class="btn-small pure-button" @click="emit('editResponse', props.response._id)">Edit</button></li>
+      <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
+    </menu>
+    <section class="responses" v-if="responsesToCurrent.length !== 0">
+      <article v-for="response in responsesToCurrent" :key="response._id">
+        <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
+        <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
+        <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
+      </article>
+    </section>
+    <!-- @refreshResponses="getResponses(props.response._id)" -->
+    <!-- <article class="timestamp">
+      <p v-if="props.response.dateCreated !== props.response.dateUpdated">Edited on: {{ formatDate(props.response.dateUpdated) }}</p>
+      <p>Created on: {{ formatDate(props.response.dateCreated) }}</p>
+    </article> -->
+    <!-- <button @click="navigateToComments(props.response._id)"><img src="../../assets/images/comment_button.png" /></button> -->
+  </div>
+</template>
+
+<style scoped>
+p {
+  margin: 0em;
+}
+
+h1 {
+  font-size: 1.5em;
+}
+
+.author {
+  font-size: 1.2em;
+}
+
+menu {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  padding: 0;
+  margin: 0;
+}
+
+.timestamp {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.base {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.base article:only-child {
+  margin-left: auto;
+}
+</style>
