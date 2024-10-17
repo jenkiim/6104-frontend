@@ -47,14 +47,15 @@ function navigateToAddResponse(id: string) {
   <p class="author">{{ props.response.author }}</p>
   <p>{{ props.response.content }}</p>
   <div class="base">
+    <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
     <menu class="buttons" v-if="props.response.author == currentUsername">
-      <li><button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button></li>
       <li><button class="btn-small pure-button" @click="emit('editResponse', props.response._id)">Edit</button></li>
       <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
     </menu>
     <section class="responses" v-if="responsesToCurrent.length !== 0">
       <article v-for="response in responsesToCurrent" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
+        <!-- @editResponse="updateEditing" -->
         <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
         <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
       </article>

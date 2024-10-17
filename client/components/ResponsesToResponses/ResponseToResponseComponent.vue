@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
@@ -33,10 +34,9 @@ onBeforeMount(async () => {
   await getResponses(props.response._id);
 });
 
-// function navigateToComments(id: string) {
-//   void router.push({ name: "CommentPage", params: { title: title } });
-//   // this.$router.push({ name: "TopicPage", params: { title: this.topic.title } });
-// }
+function navigateToAddResponse(id: string) {
+  void router.push({ name: "AddResponsePage", params: { id: id } });
+}
 </script>
 
 <template>
@@ -45,18 +45,19 @@ onBeforeMount(async () => {
     <p class="author">{{ props.response.author }}</p>
     <p>{{ props.response.content }}</p>
     <div class="base">
+      <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
       <menu v-if="props.response.author == currentUsername">
         <li><button class="btn-small pure-button" @click="emit('editResponse', props.response._id)">Edit</button></li>
         <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
       </menu>
-      <section class="responses" v-if="responses.length !== 0">
-        <article v-for="response in responses" :key="response._id">
-          <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
-          <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
-          <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
-        </article>
-      </section>
     </div>
+    <section class="responses" v-if="responses.length !== 0">
+      <article v-for="response in responses" :key="response._id">
+        <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
+        <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
+        <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
+      </article>
+    </section>
   </div>
 </template>
 
