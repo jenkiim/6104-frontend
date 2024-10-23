@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from "@/router";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import OpinionDegreeSlider from "./OpinionDegreeSlider.vue";
@@ -10,8 +11,10 @@ const sideRight = ref("");
 
 /// set the sides of the topic
 onBeforeMount(() => {
-  sideLeft.value = props.topicTitle.split(" vs. ")[0];
-  sideRight.value = props.topicTitle.split(" vs. ")[1];
+  const regex = /(.+)\s+vs\.\s+(.+)/i;
+  const match = props.topicTitle.match(regex);
+  sideLeft.value = match[1].trim();
+  sideRight.value = match[2].trim();
 });
 ////////// TODO: check if sides are undefined
 // console.log(sideLeft.value);
@@ -21,20 +24,21 @@ onBeforeMount(() => {
 //   throw new Error("Topic not in correct format (X vs. Y)");
 // }
 
-const createSide = async (topicTitle: string, degree: string) => {
+const createSide = async (topicTitle: string, newside: string) => {
   try {
     const apiLink = `/api/side/${topicTitle}`;
-    await fetchy(apiLink, "POST", {
-      body: { degree },
+    await fetchy(apiLink, "PATCH", {
+      body: { newside },
     });
   } catch (_) {
     return;
   }
   emptyForm();
+  router.go(-1);
 };
 
 const setDegreeUndecided = () => {
-  degree.value = "undecided";
+  degree.value = "Undecided";
 };
 
 const setDegree = (newDegree: string) => {

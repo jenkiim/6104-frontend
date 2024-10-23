@@ -28,12 +28,10 @@ const getResponses = async (targetId: string) => {
   } catch (_) {
     return;
   }
-  console.log("responseResults", responseResults);
   responsesToCurrent.value = responseResults;
 };
 
 onBeforeMount(async () => {
-  console.log("props.response._id", props.response._id);
   await getResponses(props.response._id);
 });
 

@@ -2,14 +2,14 @@
 // import router from "@/router";
 // import { ref } from "vue";
 // import { fetchy } from "../utils/fetchy";
-import CreateSideForm from "@/components/Side/CreateSideForm.vue";
+import UpdateSideForm from "@/components/Side/UpdateSideForm.vue";
 
 const props = defineProps(["topicTitle"]);
 </script>
 
 <template>
   <main>
-    <CreateSideForm :topicTitle="props.topicTitle"></CreateSideForm>
+    <UpdateSideForm :topicTitle="props.topicTitle"></UpdateSideForm>
   </main>
 </template>
 

@@ -56,7 +56,7 @@ export default class SideingConcept {
     if (newside) {
       await this.sides.partialUpdateOne({ user, item }, { degree: await this.assertDegree(newside) });
     }
-    return { msg: "Response successfully updated!" };
+    return { msg: `Side successfully updated!` };
   }
 
   async assertUserHasSide(user: ObjectId, item: ObjectId) {

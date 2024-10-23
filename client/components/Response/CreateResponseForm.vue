@@ -8,8 +8,6 @@ const title = ref("");
 const emit = defineEmits(["refreshResponses"]);
 
 const createResponse = async (title: string, content: string) => {
-  console.log("props.topic", props.topic);
-  console.log("title", title);
   try {
     await fetchy(`/api/responses/topic/${props.topic}`, "POST", {
       body: { title, content },

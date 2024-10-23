@@ -3,12 +3,12 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
 import AddResponseView from "../views/AddResponseView.vue";
-import AddSideView from "../views/AddSideView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
 import TopicView from "../views/TopicView.vue";
+import UpdateSideView from "../views/UpdateSideView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -37,9 +37,9 @@ const router = createRouter({
       props: true,
     },
     {
-      path: "/addSide/:topicTitle",
-      name: "AddSidePage",
-      component: AddSideView,
+      path: "/updateSide/:topicTitle",
+      name: "UpdateSidePage",
+      component: UpdateSideView,
       props: true,
     },
     {

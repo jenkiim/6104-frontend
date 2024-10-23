@@ -14,6 +14,21 @@ const createTopic = async (title: string, description: string) => {
   } catch (_) {
     return;
   }
+  // let users;
+  // try {
+  //   users = await fetchy("/api/users", "GET");
+  // } catch (_) {
+  //   return;
+  // }
+  // for (const user of users) {
+  //   try {
+  //     await fetchy(`/api/side/${title}`, "POST", {
+  //       body: { title, description },
+  //     });
+  //   } catch (_) {
+  //     return;
+  //   }
+  // }
   emit("refreshTopics");
   emptyForm();
 };

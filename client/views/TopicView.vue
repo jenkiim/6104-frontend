@@ -22,7 +22,7 @@ const getDescription = async (search: string) => {
 };
 
 const navigateToAddSide = () => {
-  void router.push({ name: "AddSidePage", params: { topicTitle: props.title } });
+  void router.push({ name: "UpdateSidePage", params: { topicTitle: props.title } });
 };
 
 onBeforeMount(async () => {
