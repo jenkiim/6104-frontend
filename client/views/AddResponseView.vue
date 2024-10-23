@@ -8,26 +8,6 @@ const title = ref("");
 const content = ref("");
 const emit = defineEmits(["addResponse", "refreshResponses"]);
 
-// const getDescription = async (search: string) => {
-//   let query: Record<string, string> = { search };
-//   let topic;
-//   console.log("search", search);
-//   console.log("query", query);
-//   try {
-//     topic = await fetchy("/api/topics", "GET", { query });
-//   } catch (_) {
-//     return;
-//   }
-//   console.log("topic", topic);
-//   topic = topic[0];
-//   description.value = topic.description;
-//   loaded.value = true;
-// };
-
-// onBeforeMount(async () => {
-//   await getDescription(props.id);
-// });
-
 const addResponse = async (title: string, content: string) => {
   try {
     await fetchy(`/api/responses/response/${props.id}`, "POST", { body: { title: title, content: content } });

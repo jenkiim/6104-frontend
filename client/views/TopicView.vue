@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ResponseListComponent from "@/components/Response/ResponseListComponent.vue";
+import router from "@/router";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../utils/fetchy";
 
@@ -10,17 +11,18 @@ let description = ref<Record<string, string>>({});
 const getDescription = async (search: string) => {
   let query: Record<string, string> = { search };
   let topic;
-  console.log("search", search);
-  console.log("query", query);
   try {
     topic = await fetchy("/api/topics", "GET", { query });
   } catch (_) {
     return;
   }
-  console.log("topic", topic);
   topic = topic[0];
   description.value = topic.description;
   loaded.value = true;
+};
+
+const navigateToAddSide = () => {
+  void router.push({ name: "AddSidePage", params: { topicTitle: props.title } });
 };
 
 onBeforeMount(async () => {
@@ -33,6 +35,7 @@ onBeforeMount(async () => {
     <h1>{{ props.title }}</h1>
     <p v-if="loaded">{{ description }}</p>
     <p v-else>Loading...</p>
+    <button @click="navigateToAddSide">Add Side</button>
     <ResponseListComponent :topic="props.title" />
   </main>
 </template>

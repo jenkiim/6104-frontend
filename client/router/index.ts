@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
 import AddResponseView from "../views/AddResponseView.vue";
+import AddSideView from "../views/AddSideView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
@@ -24,15 +25,21 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: "/topic/:title", // Add this route for the topic page
+      path: "/topic/:title",
       name: "TopicPage",
       component: TopicView,
       props: true,
     },
     {
-      path: "/response/:id", // Add this route for the topic page
+      path: "/response/:id",
       name: "AddResponsePage",
       component: AddResponseView,
+      props: true,
+    },
+    {
+      path: "/addSide/:topicTitle",
+      name: "AddSidePage",
+      component: AddSideView,
       props: true,
     },
     {

@@ -26,9 +26,9 @@ const emptyForm = () => {
 
 <template>
   <form @submit.prevent="createTopic(title, description)">
-    <label for="title">Topic Contents: <span class="required">**Must have two distinct sides**</span></label>
-    <textarea id="title" v-model="title" placeholder="Create a topic! What is your title?" required> </textarea>
-    <textarea id="description" v-model="description" placeholder="What is the description of your title?" required> </textarea>
+    <label for="title">Topic Contents: <span class="required">**Must be in the format X vs. Y**</span></label>
+    <input id="title" v-model="title" placeholder="Create a topic! Format: X vs. Y" required pattern=".+\s+vs\.\s+.+" title="Please enter in the format: X vs. Y" />
+    <textarea id="description" v-model="description" placeholder="What is the description of your topic?" required> </textarea>
     <button type="submit" class="pure-button-primary pure-button">Create Topic</button>
   </form>
 </template>
