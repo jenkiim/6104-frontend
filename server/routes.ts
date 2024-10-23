@@ -255,9 +255,17 @@ class Routes {
 
   ////// LABELING for Topics
 
-  @Router.get("/label/topic")
+  @Router.get("/label/topic/all")
   async getAllTopicLabels() {
     return Responses.topicLabels(await TopicLabeling.getAllLabels());
+  }
+
+  @Router.get("/label/topic")
+  async getTopicLabels(topicTitle: string) {
+    // get all labels for a given topic
+    const topic = await Topicing.getTopicByTitle(topicTitle);
+    const labels = await TopicLabeling.getLabelsByItem(topic._id);
+    return { msg: labels.msg, labels: await Responses.topicLabels(labels.labels) };
   }
 
   @Router.post("/label/topic")
@@ -299,10 +307,18 @@ class Routes {
 
   ////// LABELING for Responses
 
-  @Router.get("/label/response")
+  @Router.get("/label/response/all")
   async getAllResponseLabels() {
     // get all labels for responses
     return Responses.responseLabels(await ResponseLabeling.getAllLabels());
+  }
+
+  @Router.get("/label/response")
+  async getResponseLabels(id: string) {
+    // get all labels for a given response
+    const oid = new ObjectId(id);
+    const labels = await ResponseLabeling.getLabelsByItem(oid);
+    return { msg: labels.msg, labels: await Responses.responseLabels(labels.labels) };
   }
 
   @Router.post("/label/response")
