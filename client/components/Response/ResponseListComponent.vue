@@ -3,7 +3,6 @@ import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
-import CreateResponseForm from "./CreateResponseForm.vue";
 import ResponseComponent from "./ResponseComponent.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
@@ -31,10 +30,10 @@ onBeforeMount(async () => {
 
 <template>
   <div>Filter, Add Response</div>
-  <section v-if="isLoggedIn">
+  <!-- <section v-if="isLoggedIn">
     <h2>Respond to this topic!</h2>
     <CreateResponseForm :topic="props.topic" @refreshResponses="getResponses(props.topic)" />
-  </section>
+  </section> -->
   <div class="row">
     <h2>Responses:</h2>
   </div>

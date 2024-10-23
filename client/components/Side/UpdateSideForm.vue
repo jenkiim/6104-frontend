@@ -16,13 +16,6 @@ onBeforeMount(() => {
   sideLeft.value = match[1].trim();
   sideRight.value = match[2].trim();
 });
-////////// TODO: check if sides are undefined
-// console.log(sideLeft.value);
-// console.log(sideRight.value);
-// if (sideLeft.value === undefined || sideRight.value === undefined) {
-//   console.log("Topic not in correct format (X vs. Y)");
-//   throw new Error("Topic not in correct format (X vs. Y)");
-// }
 
 const createSide = async (topicTitle: string, newside: string) => {
   try {

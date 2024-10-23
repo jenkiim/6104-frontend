@@ -2,7 +2,8 @@ import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useUserStore } from "@/stores/user";
-import AddResponseView from "../views/AddResponseView.vue";
+import AddResponseToResponseView from "../views/AddResponseToResponseView.vue";
+import AddResponseToTopicView from "../views/AddResponseToTopicView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
@@ -31,9 +32,15 @@ const router = createRouter({
       props: true,
     },
     {
-      path: "/response/:id",
-      name: "AddResponsePage",
-      component: AddResponseView,
+      path: "/responseToResponse/:id",
+      name: "AddResponseToResponsePage",
+      component: AddResponseToResponseView,
+      props: true,
+    },
+    {
+      path: "/responseToTopic/:topicTitle",
+      name: "AddResponseToTopicPage",
+      component: AddResponseToTopicView,
       props: true,
     },
     {

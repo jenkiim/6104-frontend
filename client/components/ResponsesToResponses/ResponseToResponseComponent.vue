@@ -35,7 +35,7 @@ onBeforeMount(async () => {
 });
 
 function navigateToAddResponse(id: string) {
-  void router.push({ name: "AddResponsePage", params: { id: id } });
+  void router.push({ name: "AddResponseToResponsePage", params: { id: id } });
 }
 </script>
 

@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import ResponseListComponent from "@/components/Response/ResponseListComponent.vue";
 import router from "@/router";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../utils/fetchy";
+
+const { isLoggedIn } = storeToRefs(useUserStore());
 
 const props = defineProps(["title"]);
 const loaded = ref(false);
@@ -21,8 +25,12 @@ const getDescription = async (search: string) => {
   loaded.value = true;
 };
 
-const navigateToAddSide = () => {
+const navigateToUpdateSide = () => {
   void router.push({ name: "UpdateSidePage", params: { topicTitle: props.title } });
+};
+
+const navigateToAddResponse = () => {
+  void router.push({ name: "AddResponseToTopicPage", params: { topicTitle: props.title } });
 };
 
 onBeforeMount(async () => {
@@ -35,7 +43,8 @@ onBeforeMount(async () => {
     <h1>{{ props.title }}</h1>
     <p v-if="loaded">{{ description }}</p>
     <p v-else>Loading...</p>
-    <button @click="navigateToAddSide">Add Side</button>
+    <button v-if="isLoggedIn" @click="navigateToUpdateSide">Update Side</button>
+    <button v-if="isLoggedIn" @click="navigateToAddResponse">Respond to {{ props.title }}</button>
     <ResponseListComponent :topic="props.title" />
   </main>
 </template>

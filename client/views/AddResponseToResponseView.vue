@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import router from "@/router";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { fetchy } from "../utils/fetchy";
+
+const { isLoggedIn } = storeToRefs(useUserStore());
 
 const props = defineProps(["id"]);
 const title = ref("");
@@ -26,7 +30,7 @@ const addResponse = async (title: string, content: string) => {
 </script>
 
 <template>
-  <main>
+  <main v-if="isLoggedIn">
     <h1>Write a response to {{ props.id }}!</h1>
     <form @submit.prevent="addResponse(title, content)">
       <textarea id="content" v-model="title" placeholder="Title" required> </textarea>
