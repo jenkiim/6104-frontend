@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable unused-imports/no-unused-vars */
 import { ObjectId } from "mongodb";
 
 import { Router, getExpressRouter } from "./framework/router";
@@ -430,7 +432,8 @@ class Routes {
       title = (await RespondingToResponse.getById(oid)).title;
     }
     const count = await Upvoting.getCount(oid);
-    return { msg: `Count of response with title ${title} and id ${id} is ${count}`, count: count };
+    // return { msg: `Count of response with title ${title} and id ${id} is ${count}`, count: count };
+    return count;
   }
 
   @Router.get("/vote")
@@ -446,7 +449,8 @@ class Routes {
       title = (await RespondingToResponse.getById(oid)).title;
     }
     const vote = await Upvoting.getVote(user, oid);
-    return { msg: `Your vote to response with title ${title} and id ${id} is ${vote}`, vote: vote };
+    // return { msg: `Your vote to response with title ${title} and id ${id} is ${vote}`, vote: vote };
+    return vote;
   }
 
   ///// SORTING

@@ -6,6 +6,7 @@ import router from "../../router";
 import { fetchy } from "../../utils/fetchy";
 import DisplayLabels from "../Label/DisplayLabels.vue";
 import ResponseToResponseComponent from "../ResponsesToResponses/ResponseToResponseComponent.vue";
+import UpvotingComponent from "../Upvoting/UpvotingComponent.vue";
 
 const props = defineProps(["response"]);
 const emit = defineEmits(["refreshResponses"]);
@@ -51,6 +52,7 @@ function navigateToAddResponse(id: string) {
     <menu class="buttons" v-if="props.response.author == currentUsername">
       <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
     </menu>
+    <UpvotingComponent :responseId="props.response._id" />
     <section class="responses" v-if="responsesToCurrent.length !== 0">
       <article v-for="response in responsesToCurrent" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />

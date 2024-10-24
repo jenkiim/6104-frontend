@@ -52,7 +52,7 @@ export default class UpvotingConcept {
       const updatedUpvotes = upvote.upvotes.concat(user);
       await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes, count: currentCount });
     }
-    return { msg: `Upvoted response with title ${title} and id ${item} successfully!` };
+    return { msg: `Upvoted ${title} successfully!` };
   }
 
   async downvote(item: ObjectId, user: ObjectId, title: string) {
@@ -79,7 +79,7 @@ export default class UpvotingConcept {
       const updatedDownvotes = downvote.downvotes.concat(user);
       await this.upvotes.partialUpdateOne({ item }, { downvotes: updatedDownvotes, count: currentCount });
     }
-    return { msg: `Downvoted response with title ${title} and id ${item} successfully!` };
+    return { msg: `Downvoted ${title} successfully!` };
   }
 
   async unvote(item: ObjectId, user: ObjectId, title: string) {
@@ -106,7 +106,7 @@ export default class UpvotingConcept {
       currentCount--;
       await this.upvotes.partialUpdateOne({ item }, { upvotes: updatedUpvotes, count: currentCount });
     }
-    return { msg: `Unvoted response with title ${title} and id ${item} successfully!` };
+    return { msg: `Unvoted ${title} successfully!` };
   }
 
   async getCount(item: ObjectId) {
