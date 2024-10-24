@@ -4,6 +4,7 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
+import UpvotingComponent from "../Upvoting/UpvotingComponent.vue";
 
 const props = defineProps(["response"]);
 const emit = defineEmits(["refreshResponses"]);
@@ -50,6 +51,7 @@ function navigateToAddResponse(id: string) {
         <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
       </menu>
     </div>
+    <UpvotingComponent :responseId="props.response._id" />
     <section class="responses" v-if="responses.length !== 0">
       <article v-for="response in responses" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
