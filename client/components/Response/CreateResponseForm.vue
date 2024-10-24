@@ -46,7 +46,7 @@ const updateLabels = (selectedLabels: string[]) => {
   <form @submit.prevent="createResponse(title, content)">
     <textarea id="title" v-model="title" placeholder="Title..." required> </textarea>
     <textarea id="content" v-model="content" placeholder="Thoughts!" required> </textarea>
-    <AddLabel @updateLabels="updateLabels" :topic="props.topic" />
+    <AddLabel @updateLabels="updateLabels" />
     <button type="submit" class="pure-button-primary pure-button">Respond</button>
   </form>
 </template>
