@@ -2,9 +2,10 @@
 import { defineEmits, defineProps, onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
-const props = defineProps(["item", "topicOrResponse"]);
+const props = defineProps(["topicOrResponse"]);
 const newLabel = ref("");
 const allLabels = ref<string[]>([]);
+const selectedLabels = ref<string[]>([]);
 const emit = defineEmits(["updateLabels"]);
 
 // Fetch existing labels
@@ -33,20 +34,21 @@ const addOrAttachLabel = async () => {
     }
     allLabels.value.push(label); // Add the label to the list of all labels
   }
-  const itemString = props.topicOrResponse === "topic" ? props.item.title : props.item._id;
-  const apiUrl = `/api/label/${label}/add/${props.topicOrResponse}/${itemString}`;
-  try {
-    await fetchy(apiUrl, "PATCH");
-  } catch (_) {
-    return;
-  }
+  //   const itemString = props.topicOrResponse === "topic" ? props.item.title : props.item._id;
+  //   const apiUrl = `/api/label/${label}/add/${props.topicOrResponse}/${itemString}`;
+  //   try {
+  //     await fetchy(apiUrl, "PATCH");
+  //   } catch (_) {
+  //     return;
+  //   }
+  selectedLabels.value.push(label); // Add label to selected labels
   newLabel.value = ""; // Clear input after adding
   updateLabels();
 };
 
 // Emit updated labels to parent component
 const updateLabels = () => {
-  emit("updateLabels");
+  emit("updateLabels", selectedLabels.value);
 };
 
 // Fetch labels on component mount
@@ -56,10 +58,12 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <div class="label-selector">
-    <div class="new-label">
-      <input type="text" v-model="newLabel" placeholder="Type and add a new label" />
-      <button @click.prevent="addOrAttachLabel" class="add-button">Add</button>
+  <div>
+    <div class="label-selector">
+      <div class="new-label">
+        <input type="text" v-model="newLabel" placeholder="Type and add a new label" />
+        <button @click.prevent="addOrAttachLabel" class="add-button">Add</button>
+      </div>
     </div>
   </div>
 </template>

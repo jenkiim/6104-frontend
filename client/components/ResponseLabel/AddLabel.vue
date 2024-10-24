@@ -29,7 +29,6 @@ const toggleLabel = (label: string) => {
 
 const addLabel = async () => {
   if (newLabel.value && !allLabels.value.includes(newLabel.value)) {
-    console.log("newLabel.value", newLabel.value);
     allLabels.value.push(newLabel.value);
     try {
       await fetchy("/api/label/response", "POST", {

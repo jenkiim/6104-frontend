@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
+import AddLabelNewForm from "../Label/AddLabelNewForm.vue";
 
 const description = ref("");
 const title = ref("");
+const labels = ref<string[]>([]);
 const emit = defineEmits(["refreshTopics"]);
 
 const createTopic = async (title: string, description: string) => {
@@ -14,28 +16,29 @@ const createTopic = async (title: string, description: string) => {
   } catch (_) {
     return;
   }
-  // let users;
-  // try {
-  //   users = await fetchy("/api/users", "GET");
-  // } catch (_) {
-  //   return;
-  // }
-  // for (const user of users) {
-  //   try {
-  //     await fetchy(`/api/side/${title}`, "POST", {
-  //       body: { title, description },
-  //     });
-  //   } catch (_) {
-  //     return;
-  //   }
-  // }
+  // add all selected labels to topic
+  try {
+    const promises = labels.value.map((label) => fetchy(`/api/label/${label}/add/topic/${title}`, "PATCH"));
+    await Promise.all(promises);
+  } catch (_) {
+    return;
+  }
   emit("refreshTopics");
   emptyForm();
+};
+
+const removeLabel = (index: number) => {
+  labels.value.splice(index, 1);
+};
+
+const updateLabels = (selectedLabels: string[]) => {
+  labels.value = selectedLabels;
 };
 
 const emptyForm = () => {
   title.value = "";
   description.value = "";
+  labels.value = [];
 };
 </script>
 
@@ -44,6 +47,11 @@ const emptyForm = () => {
     <label for="title">Topic Contents: <span class="required">**Must be in the format X vs. Y**</span></label>
     <input id="title" v-model="title" placeholder="Create a topic! Format: X vs. Y" required pattern=".+\s+vs\.\s+.+" title="Please enter in the format: X vs. Y" />
     <textarea id="description" v-model="description" placeholder="What is the description of your topic?" required> </textarea>
+    <span v-for="(label, index) in labels" :key="label" class="label">
+      {{ label }}
+      <button @click="removeLabel(index)" class="delete-btn">x</button>
+    </span>
+    <AddLabelNewForm :topicOrResponse="'topic'" @update-labels="updateLabels" />
     <button type="submit" class="pure-button-primary pure-button">Create Topic</button>
   </form>
 </template>

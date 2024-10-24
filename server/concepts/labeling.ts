@@ -91,7 +91,6 @@ export default class LabelingConcept {
       throw new NotAllowedError(`Label ${title} isn't attached to the item!`);
     }
     const updated_items = label.items.filter((currentItem) => currentItem.toString() !== item.toString());
-    console.log(updated_items);
     await this.labels.partialUpdateOne({ title }, { items: updated_items });
     return { msg: `Label ${title} successfully removed from item!`, label: await this.labels.readOne({ title }) };
   }
