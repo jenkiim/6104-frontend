@@ -265,7 +265,7 @@ class Routes {
     // get all labels for a given topic
     const topic = await Topicing.getTopicByTitle(topicTitle);
     const labels = await TopicLabeling.getLabelsByItem(topic._id);
-    return { msg: labels.msg, labels: await Responses.topicLabels(labels.labels) };
+    return await Responses.topicLabels(labels.labels);
   }
 
   @Router.post("/label/topic")
@@ -276,14 +276,14 @@ class Routes {
     return { msg: created.msg, response: await Responses.topicLabel(created.label) };
   }
 
-  @Router.delete("/label/topic/:title")
-  async deleteTopicLabel(session: SessionDoc, title: string) {
-    // delete topic label with given id
-    const user = Sessioning.getUser(session);
-    const label = await TopicLabeling.getLabelByTitle(title);
-    await TopicLabeling.assertAuthorIsUser(title, user);
-    return TopicLabeling.delete(label._id);
-  }
+  // @Router.delete("/label/topic/:title")
+  // async deleteTopicLabel(session: SessionDoc, title: string) {
+  //   // delete topic label with given id
+  //   const user = Sessioning.getUser(session);
+  //   const label = await TopicLabeling.getLabelByTitle(title);
+  //   await TopicLabeling.assertAuthorIsUser(title, user);
+  //   return TopicLabeling.delete(label._id);
+  // }
 
   @Router.patch("/label/:label/add/topic/:topic")
   async addLabelToTopic(session: SessionDoc, topic: string, label: string) {
@@ -318,7 +318,7 @@ class Routes {
     // get all labels for a given response
     const oid = new ObjectId(id);
     const labels = await ResponseLabeling.getLabelsByItem(oid);
-    return { msg: labels.msg, labels: await Responses.responseLabels(labels.labels) };
+    return await Responses.responseLabels(labels.labels);
   }
 
   @Router.post("/label/response")
@@ -329,14 +329,14 @@ class Routes {
     return { msg: created.msg, response: await Responses.responseLabel(created.label) };
   }
 
-  @Router.delete("/label/response/:title")
-  async deleteResponseLabel(session: SessionDoc, title: string) {
-    // delete response label with given id
-    const user = Sessioning.getUser(session);
-    const label = await ResponseLabeling.getLabelByTitle(title);
-    await ResponseLabeling.assertAuthorIsUser(title, user);
-    return ResponseLabeling.delete(label._id);
-  }
+  // @Router.delete("/label/response/:title")
+  // async deleteResponseLabel(session: SessionDoc, title: string) {
+  //   // delete response label with given id
+  //   const user = Sessioning.getUser(session);
+  //   const label = await ResponseLabeling.getLabelByTitle(title);
+  //   await ResponseLabeling.assertAuthorIsUser(title, user);
+  //   return ResponseLabeling.delete(label._id);
+  // }
 
   @Router.patch("/label/:label/add/response/:id")
   async addLabelToResponse(session: SessionDoc, label: string, id: string) {

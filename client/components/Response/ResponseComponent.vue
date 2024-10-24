@@ -4,6 +4,7 @@ import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import router from "../../router";
 import { fetchy } from "../../utils/fetchy";
+import DisplayLabels from "../Label/DisplayLabels.vue";
 import ResponseToResponseComponent from "../ResponsesToResponses/ResponseToResponseComponent.vue";
 
 const props = defineProps(["response"]);
@@ -46,6 +47,7 @@ function navigateToAddResponse(id: string) {
   <p>{{ props.response.content }}</p>
   <div class="base">
     <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
+    <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
     <menu class="buttons" v-if="props.response.author == currentUsername">
       <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
     </menu>

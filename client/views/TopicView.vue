@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DisplayLabels from "@/components/Label/DisplayLabels.vue";
 import ResponseListComponent from "@/components/Response/ResponseListComponent.vue";
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
@@ -10,6 +11,7 @@ const { isLoggedIn } = storeToRefs(useUserStore());
 
 const props = defineProps(["title"]);
 const loaded = ref(false);
+const topicObject = ref<Record<string, string>>({});
 let description = ref<Record<string, string>>({});
 
 const getDescription = async (search: string) => {
@@ -21,6 +23,7 @@ const getDescription = async (search: string) => {
     return;
   }
   topic = topic[0];
+  topicObject.value = topic;
   description.value = topic.description;
   loaded.value = true;
 };
@@ -43,6 +46,7 @@ onBeforeMount(async () => {
     <h1>{{ props.title }}</h1>
     <p v-if="loaded">{{ description }}</p>
     <p v-else>Loading...</p>
+    <DisplayLabels v-if="loaded" :item="topicObject" :topicOrResponse="'topic'" />
     <button v-if="isLoggedIn" @click="navigateToUpdateSide">Update Side</button>
     <button v-if="isLoggedIn" @click="navigateToAddResponse">Respond to {{ props.title }}</button>
     <ResponseListComponent :topic="props.title" />
