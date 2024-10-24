@@ -2,7 +2,7 @@
 import router from "@/router";
 import { ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
-import AddLabel from "../ResponseLabel/AddLabel.vue";
+import AddLabel from "../ResponseLabel/AddLabelComponent.vue";
 
 const props = defineProps(["topic"]);
 const content = ref("");
