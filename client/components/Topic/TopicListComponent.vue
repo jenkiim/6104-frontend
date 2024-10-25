@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import LabelFilterDropDown from "../Label/LabelFilterDropDown.vue";
 import SortDropdown from "../Sorting/SortDropdown.vue";
 import SearchTopicForm from "./SearchTopicForm.vue";
 
@@ -15,23 +16,40 @@ const loaded = ref(false);
 const topics = ref<Array<Record<string, string>>>([]);
 const searchText = ref("");
 const sort = ref("newest");
+const filters = ref<string[]>([]);
 
 // Function to fetch topics, optionally sorting by a specified criterion
-const getTopics = async (sort: string, search?: string) => {
+const getTopics = async (sort: string, search?: string, selectedFilters?: string[]) => {
   // /responses/topic/:topicid/sort     sort
   let query: Record<string, string> = search !== undefined ? { sort, search } : { sort };
-  let topicResults;
+  let topicSortResults;
   try {
-    topicResults = await fetchy("/api/topics/sort", "GET", { query });
+    topicSortResults = await fetchy("/api/topics/sort", "GET", { query });
   } catch (_) {
     return;
   }
+  // only include topics that match the selected filters
+  if (selectedFilters) {
+    let filteredTopics = new Set(topicSortResults.topics.map((topic: Record<string, string>) => topic.title));
+    for (const index in selectedFilters) {
+      const filter = selectedFilters[index];
+      let topicFilterResults = [];
+      try {
+        topicFilterResults = await fetchy(`/api/topics/label/${filter}`, "GET");
+      } catch (_) {
+        return;
+      }
+      const topicFilterResultSet = new Set(topicFilterResults.topics.map((topic: Record<string, string>) => topic.title));
+      filteredTopics = new Set([...filteredTopics].filter((topic) => topicFilterResultSet.has(topic)));
+    }
+    topicSortResults.topics = topicSortResults.topics.filter((topic: Record<string, string>) => filteredTopics.has(topic.title));
+  }
   searchText.value = search ? search : "";
-  topics.value = topicResults.topics;
+  topics.value = topicSortResults.topics;
 };
 
 const searchTopics = async (search: string) => {
-  await getTopics(sort.value, search);
+  await getTopics(sort.value, search, filters.value);
 };
 
 const navigateToTopic = (title: string) => {
@@ -40,7 +58,12 @@ const navigateToTopic = (title: string) => {
 
 const handleSortTopics = async (option: string) => {
   sort.value = option;
-  await getTopics(option, searchText.value);
+  await getTopics(option, searchText.value, filters.value);
+};
+
+const handleFilterTopics = async (selectedFilters: string[]) => {
+  filters.value = selectedFilters;
+  await getTopics(sort.value, searchText.value, selectedFilters);
 };
 
 onBeforeMount(async () => {
@@ -61,7 +84,8 @@ const options = [
     <CreateTopicForm @refreshTopics="getTopics" />
   </section>
 
-  <!-- Sort topics using the dropdown -->
+  <LabelFilterDropDown @filterItems="handleFilterTopics" :topicOrResponse="'topic'" />
+
   <SortDropdown @sortItems="handleSortTopics" :sort-options="options" />
 
   <div class="row">
