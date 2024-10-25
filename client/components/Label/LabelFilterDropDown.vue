@@ -41,6 +41,10 @@ const applyFilters = () => {
   emit("filterItems", toRaw(selectedFilters.value));
 };
 
+const removeSelectedFilter = (filter: string) => {
+  selectedFilters.value = selectedFilters.value.filter((selectedFilter) => selectedFilter !== filter);
+};
+
 onBeforeMount(async () => {
   await getAllLabels();
 });
@@ -49,7 +53,9 @@ onBeforeMount(async () => {
 <template>
   <div class="filter-container">
     <div class="filter-dropdown">
-      <button @click="toggleDropdown" class="dropdown-button">Select Filters</button>
+      <button @click="toggleDropdown" class="dropdown-button">
+        Filters <span v-if="selectedFilters.length">({{ selectedFilters.length }})</span>
+      </button>
       <div v-if="showDropdown" class="dropdown-options">
         <input type="text" v-model="searchQuery" placeholder="Search labels" class="search-input" />
         <ul>
@@ -63,6 +69,7 @@ onBeforeMount(async () => {
     <div class="selected-filters">
       <span v-for="filter in selectedFilters" :key="filter" class="filter-tag">
         {{ filter }}
+        <button @click="removeSelectedFilter(filter)">X</button>
       </span>
     </div>
   </div>
