@@ -19,19 +19,19 @@ const addResponse = async (title: string, content: string) => {
     return;
   }
   emit("refreshResponses");
-  // void router.push({ name: "TopicView", params: { id: props.id } }); //////// will error if the target isn't a topic
+  emptyForm();
   router.go(-1);
 };
 
-// const emptyForm = () => {
-//   title.value = "";
-//   content.value = "";
-// };
+const emptyForm = () => {
+  title.value = "";
+  content.value = "";
+};
 </script>
 
 <template>
   <main v-if="isLoggedIn">
-    <h1>Write a response to {{ props.id }}!</h1>
+    <h1>Write a response!</h1>
     <form @submit.prevent="addResponse(title, content)">
       <textarea id="content" v-model="title" placeholder="Title" required> </textarea>
       <textarea id="content" v-model="content" placeholder="Content" required> </textarea>

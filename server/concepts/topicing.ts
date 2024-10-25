@@ -87,7 +87,6 @@ export default class TopicingConcept {
         let allTopics = await this.getAllTopics();
         if (search) {
           allTopics = await this.searchTopicTitles(search);
-          console.log("allTopics", allTopics);
           searchTopics = allTopics.map((topic) => topic._id.toString());
         }
         const topicsByEngagement = [];

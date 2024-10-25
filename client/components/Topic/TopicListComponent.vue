@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import CreateTopicForm from "@/components/Topic/CreateTopicForm.vue";
+import SortTopicsDropdown from "@/components/Topic/SortTopicsDropdown.vue"; // Import the dropdown
 import TopicComponent from "@/components/Topic/TopicComponent.vue";
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
@@ -11,33 +12,40 @@ import SearchTopicForm from "./SearchTopicForm.vue";
 const { isLoggedIn } = storeToRefs(useUserStore());
 
 const loaded = ref(false);
-let topics = ref<Array<Record<string, string>>>([]);
-// let editing = ref("");
-let searchText = ref("");
+const topics = ref<Array<Record<string, string>>>([]);
+const searchText = ref("");
+const sort = ref("newest");
 
-async function getTopics(search?: string) {
-  let query: Record<string, string> = search !== undefined ? { search } : {};
+// Function to fetch topics, optionally sorting by a specified criterion
+const getTopics = async (sort: string, search?: string) => {
+  // /responses/topic/:topicid/sort     sort
+  let query: Record<string, string> = search !== undefined ? { sort, search } : { sort };
   let topicResults;
   try {
-    topicResults = await fetchy("/api/topics", "GET", { query });
+    topicResults = await fetchy("/api/topics/sort", "GET", { query });
   } catch (_) {
     return;
   }
   searchText.value = search ? search : "";
-  topics.value = topicResults;
-}
+  topics.value = topicResults.topics;
+};
 
-function navigateToTopic(title: string) {
+const searchTopics = async (search: string) => {
+  await getTopics(sort.value, search);
+};
+
+const navigateToTopic = (title: string) => {
   void router.push({ name: "TopicPage", params: { title: title } });
-  // this.$router.push({ name: "TopicPage", params: { title: this.topic.title } });
-}
+};
 
-// function updateEditing(id: string) {
-//   editing.value = id;
-// }
+// Handle the sortTopics event emitted from the dropdown
+const handleSortTopics = async (option: string) => {
+  sort.value = option;
+  await getTopics(option, searchText.value);
+};
 
 onBeforeMount(async () => {
-  await getTopics();
+  await getTopics(sort.value);
   loaded.value = true;
 });
 </script>
@@ -47,18 +55,21 @@ onBeforeMount(async () => {
     <h2>Create a topic:</h2>
     <CreateTopicForm @refreshTopics="getTopics" />
   </section>
+
+  <!-- Sort topics using the dropdown -->
+  <SortTopicsDropdown @sortTopics="handleSortTopics" />
+
   <div class="row">
     <h2 v-if="!searchText">Topics:</h2>
     <h2 v-else>Topics by {{ searchText }}:</h2>
-    <SearchTopicForm @getTopicsByText="getTopics" />
+    <SearchTopicForm @getTopicsByText="searchTopics" />
   </div>
+
   <section class="topics" v-if="loaded && topics.length !== 0">
     <article v-for="topic in topics" :key="topic._id">
       <div @click="navigateToTopic(topic.title)">
         <TopicComponent :topic="topic" @refreshTopics="getTopics" />
       </div>
-      <!-- <TopicComponent :topic="topic" @refreshTopics="getTopics" /> -->
-      <!-- <EditPostForm v-else :post="post" @refreshPosts="getPosts" @editPost="updateEditing" /> -->
     </article>
   </section>
   <p v-else-if="loaded">No posts found</p>

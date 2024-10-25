@@ -463,7 +463,7 @@ class Routes {
     // return all topics in given sorted order
     const sortedByEngagement = await RespondingToTopic.getSortedByResponseCount();
     const topics = await Topicing.getSorted(sort, search, sortedByEngagement);
-    return { msg: `Successfully sorted topics by ${sort}`, topics: topics };
+    return { msg: `Successfully sorted topics by ${sort}`, topics: await Responses.topics(topics) };
   }
 
   @Router.get("/responses/topic/:topicid/sort")
@@ -475,7 +475,7 @@ class Routes {
     const sortByUpvoteIds = await Upvoting.sortItemsByCount(responsesToTopic);
     const sortByControversyIds = await Upvoting.sortItemsByControversy(responsesToTopic);
     const responses = await RespondingToTopic.getSorted(sort, topic._id, sortByUpvoteIds, sortByControversyIds);
-    return { msg: `Successfully sorted responses to ${topic.title} by ${sort}`, topics: responses };
+    return { msg: `Successfully sorted responses to ${topic.title} by ${sort}`, topics: await Responses.responsesToTopic(responses) };
   }
 
   ///// FILTERING
