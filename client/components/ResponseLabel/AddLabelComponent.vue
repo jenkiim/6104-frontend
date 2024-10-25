@@ -29,6 +29,10 @@ const toggleLabel = (label: string) => {
 
 const addLabel = async () => {
   if (newLabel.value && !allLabels.value.includes(newLabel.value)) {
+    if (newLabel.value.length > 20) {
+      alert("Label must be less than 20 characters");
+      return;
+    }
     allLabels.value.push(newLabel.value);
     try {
       await fetchy("/api/label/response", "POST", {

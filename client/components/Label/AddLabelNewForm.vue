@@ -24,6 +24,10 @@ const addOrAttachLabel = async () => {
   const label = newLabel.value;
   // if label doesn't exist, make one
   if (!allLabels.value.includes(label)) {
+    if (newLabel.value.length > 20) {
+      alert("Label must be less than 20 characters");
+      return;
+    }
     // new label
     try {
       await fetchy(`/api/label/${props.topicOrResponse}`, "POST", {
