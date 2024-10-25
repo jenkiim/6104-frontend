@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineEmits, defineProps, onBeforeMount, ref } from "vue";
+import { defineEmits, defineProps, ref } from "vue";
 
 const props = defineProps(["sideLeft", "sideRight", "addOrFilter", "options"]);
 const emit = defineEmits(["updateDegree"]);
@@ -8,19 +8,15 @@ const degree = ref("");
 const onUpdateDegree = async (newDegree: string) => {
   if (props.addOrFilter === "filter") {
     if (degree.value === newDegree) {
-      degree.value = "none"; // Deselect if already selected
+      degree.value = ""; // Deselect if already selected
     } else {
       degree.value = newDegree;
     }
+  } else {
+    degree.value = newDegree;
   }
-  emit("updateDegree", newDegree);
+  emit("updateDegree", degree.value);
 };
-
-onBeforeMount(() => {
-  if (props.addOrFilter === "filter") {
-    degree.value = "none";
-  }
-});
 </script>
 
 <template>

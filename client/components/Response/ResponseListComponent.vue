@@ -9,7 +9,7 @@ import ResponseComponent from "./ResponseComponent.vue";
 const props = defineProps(["topic"]);
 const sort = ref("newest");
 const filters = ref<string[]>([]);
-const degree = ref("none");
+const degree = ref("");
 const sideLeft = ref("");
 const sideRight = ref("");
 const loaded = ref(false);
@@ -25,18 +25,19 @@ const sortOptions = [
   { display: "Controversial", value: "controversial" },
 ];
 
-const getResponses = async (topic: string, sort: string, selectedFilters?: string[]) => {
+const getResponses = async (topic: string, sort: string, selectedFilters?: string[], degree?: string) => {
   const apiUrl = `/api/responses/topic/${topic}/sort`;
   let query: Record<string, string> = { sort };
-  let responseSortResults;
+  let responseSortResults: Record<string, string>[];
   try {
-    responseSortResults = await fetchy(apiUrl, "GET", { query });
+    const apiResponseSortResults = await fetchy(apiUrl, "GET", { query });
+    responseSortResults = apiResponseSortResults.responses;
   } catch (_) {
     return;
   }
   // only include responses that match the selected filters
   if (selectedFilters) {
-    let filteredResponses = new Set(responseSortResults.responses.map((response: Record<string, string>) => response.title));
+    let filteredResponses = new Set(responseSortResults.map((response: Record<string, string>) => response.title));
     for (const index in selectedFilters) {
       const filter = selectedFilters[index];
       let responseFilterResults = [];
@@ -48,23 +49,38 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
       const responseFilterResultSet = new Set(responseFilterResults.responses.map((response: Record<string, string>) => response.title));
       filteredResponses = new Set([...filteredResponses].filter((response) => responseFilterResultSet.has(response)));
     }
-    responseSortResults.responses = responseSortResults.responses.filter((response: Record<string, string>) => filteredResponses.has(response.title));
+    responseSortResults = responseSortResults.filter((response: Record<string, string>) => filteredResponses.has(response.title));
   }
-  responses.value = responseSortResults.responses;
+  if (degree) {
+    const idsToInclude = new Set();
+    for (const response of responseSortResults) {
+      try {
+        const responseDegree = await fetchy(`/api/responses/response/${response._id}/degree`, "GET");
+        if (responseDegree.side === degree) {
+          idsToInclude.add(response._id.toString());
+        }
+      } catch (_) {
+        return;
+      }
+    }
+    responseSortResults = responseSortResults.filter((response: Record<string, string>) => idsToInclude.has(response._id.toString()));
+  }
+  responses.value = responseSortResults;
 };
 
 const handleSortResponses = async (option: string) => {
   sort.value = option;
-  await getResponses(props.topic, option, filters.value);
+  await getResponses(props.topic, option, filters.value, degree.value);
 };
 
 const handleFilterResponses = async (selectedFilters: string[]) => {
   filters.value = selectedFilters;
-  await getResponses(props.topic, sort.value, selectedFilters);
+  await getResponses(props.topic, sort.value, selectedFilters, degree.value);
 };
 
-const setDegree = (newDegree: string) => {
+const handleDegree = async (newDegree: string) => {
   degree.value = newDegree;
+  await getResponses(props.topic, sort.value, filters.value, newDegree);
 };
 
 onBeforeMount(async () => {
@@ -89,7 +105,7 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="sidesLoaded">
-    <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" :addOrFilter="'filter'" :options="sideOptions" @updateDegree="setDegree" />
+    <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" :addOrFilter="'filter'" :options="sideOptions" @updateDegree="handleDegree" />
   </div>
   <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
   <SortDropdown :sortOptions="sortOptions" @sortItems="handleSortResponses" />
