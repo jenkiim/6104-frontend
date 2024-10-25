@@ -1,37 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { defineProps, ref } from "vue";
 
-// State to manage whether dropdown is open or closed
 const isDropdownOpen = ref(false);
+const props = defineProps(["sortOptions"]);
 
-// Toggle the dropdown open/closed
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
 };
 
-// Emit an event to parent with the selected sorting option
-const emit = defineEmits(["sortTopics"]);
+const emit = defineEmits(["sortItems"]);
 
 const selectSortOption = (option: string) => {
-  emit("sortTopics", option);
-  isDropdownOpen.value = false; // Close the dropdown after selection
+  emit("sortItems", option);
+  isDropdownOpen.value = false; // close the dropdown after selection
 };
 </script>
 
 <template>
   <div class="sort-dropdown">
-    <!-- Button to open/close the dropdown -->
     <button @click="toggleDropdown" class="sort-button">
       Sort Topics
       <span v-if="isDropdownOpen">▲</span>
       <span v-else>▼</span>
     </button>
-
-    <!-- Dropdown menu with sorting options -->
     <div v-if="isDropdownOpen" class="dropdown-menu">
-      <button @click="selectSortOption('newest')">Newest</button>
-      <button @click="selectSortOption('engagement')">Engagement</button>
-      <button @click="selectSortOption('random')">Random</button>
+      <article v-for="(option, index) in props.sortOptions" :key="index">
+        <button @click="selectSortOption(option.value)">{{ option.display }}</button>
+      </article>
     </div>
   </div>
 </template>
@@ -76,6 +71,7 @@ const selectSortOption = (option: string) => {
   border-radius: 3px;
   cursor: pointer;
   text-align: left;
+  width: 100%;
 }
 
 .dropdown-menu button:hover {

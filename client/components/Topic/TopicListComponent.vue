@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import CreateTopicForm from "@/components/Topic/CreateTopicForm.vue";
-import SortTopicsDropdown from "@/components/Topic/SortTopicsDropdown.vue"; // Import the dropdown
 import TopicComponent from "@/components/Topic/TopicComponent.vue";
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
 import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import SortDropdown from "../Sorting/SortDropdown.vue";
 import SearchTopicForm from "./SearchTopicForm.vue";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
@@ -38,7 +38,6 @@ const navigateToTopic = (title: string) => {
   void router.push({ name: "TopicPage", params: { title: title } });
 };
 
-// Handle the sortTopics event emitted from the dropdown
 const handleSortTopics = async (option: string) => {
   sort.value = option;
   await getTopics(option, searchText.value);
@@ -48,6 +47,12 @@ onBeforeMount(async () => {
   await getTopics(sort.value);
   loaded.value = true;
 });
+
+const options = [
+  { display: "Newest", value: "newest" },
+  { display: "Engagement", value: "engagement" },
+  { display: "Random", value: "random" },
+];
 </script>
 
 <template>
@@ -57,7 +62,7 @@ onBeforeMount(async () => {
   </section>
 
   <!-- Sort topics using the dropdown -->
-  <SortTopicsDropdown @sortTopics="handleSortTopics" />
+  <SortDropdown @sortItems="handleSortTopics" :sort-options="options" />
 
   <div class="row">
     <h2 v-if="!searchText">Topics:</h2>

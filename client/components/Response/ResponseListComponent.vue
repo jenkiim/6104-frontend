@@ -1,45 +1,55 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
 import { fetchy } from "@/utils/fetchy";
-import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
+import SortDropdown from "../Sorting/SortDropdown.vue";
 import ResponseComponent from "./ResponseComponent.vue";
 
-const { isLoggedIn } = storeToRefs(useUserStore());
+// const { isLoggedIn } = storeToRefs(useUserStore());
 const props = defineProps(["topic"]);
+const sort = ref("newest");
 
 const loaded = ref(false);
 let responses = ref<Array<Record<string, string>>>([]);
 
-async function getResponses(topic: string) {
-  let query: Record<string, string> = { topic };
-  let topicResults;
+const getResponses = async (sort: string, topic: string) => {
+  const apiUrl = `/api/responses/topic/${topic}/sort`;
+  let query: Record<string, string> = { sort };
+  let responseResults;
   try {
-    topicResults = await fetchy("/api/responses/topic", "GET", { query });
+    responseResults = await fetchy(apiUrl, "GET", { query });
   } catch (_) {
     return;
   }
-  responses.value = topicResults;
-}
+  responses.value = responseResults.responses;
+};
+
+const handleSortResponses = async (option: string) => {
+  sort.value = option;
+  await getResponses(option, props.topic);
+};
 
 onBeforeMount(async () => {
-  await getResponses(props.topic);
+  await getResponses(sort.value, props.topic);
   loaded.value = true;
 });
+
+const options = [
+  { display: "Newest", value: "newest" },
+  { display: "Random", value: "random" },
+  { display: "Upvotes", value: "upvotes" },
+  { display: "Downvotes", value: "downvotes" },
+  { display: "Controversial", value: "controversial" },
+];
 </script>
 
 <template>
-  <div>Filter, Add Response</div>
-  <!-- <section v-if="isLoggedIn">
-    <h2>Respond to this topic!</h2>
-    <CreateResponseForm :topic="props.topic" @refreshResponses="getResponses(props.topic)" />
-  </section> -->
+  <SortDropdown :sortOptions="options" @sortItems="handleSortResponses" />
   <div class="row">
     <h2>Responses:</h2>
   </div>
   <section class="responses" v-if="loaded && responses.length !== 0">
     <article v-for="response in responses" :key="response._id">
-      <ResponseComponent :response="response" @refreshResponses="getResponses(props.topic)" />
+      <ResponseComponent :response="response" @refreshResponses="getResponses(sort, props.topic)" />
     </article>
   </section>
   <p v-else-if="loaded">No responses found</p>

@@ -466,16 +466,16 @@ class Routes {
     return { msg: `Successfully sorted topics by ${sort}`, topics: await Responses.topics(topics) };
   }
 
-  @Router.get("/responses/topic/:topicid/sort")
-  async sortResponsesOnTopic(topicid: string, sort: string) {
+  @Router.get("/responses/topic/:topicTitle/sort")
+  async sortResponsesOnTopic(topicTitle: string, sort: string) {
     // sort can be by upvotes, downvotes, controversial (abs(upvotes - downvotes)), time, random
     // return responses to topic in given sorted order
-    const topic = await Topicing.getTopicById(new ObjectId(topicid));
-    const responsesToTopic = (await RespondingToTopic.getByTarget(new ObjectId(topicid))).map((response) => response._id);
+    const topic = await Topicing.getTopicByTitle(topicTitle);
+    const responsesToTopic = (await RespondingToTopic.getByTarget(topic._id)).map((response) => response._id);
     const sortByUpvoteIds = await Upvoting.sortItemsByCount(responsesToTopic);
     const sortByControversyIds = await Upvoting.sortItemsByControversy(responsesToTopic);
     const responses = await RespondingToTopic.getSorted(sort, topic._id, sortByUpvoteIds, sortByControversyIds);
-    return { msg: `Successfully sorted responses to ${topic.title} by ${sort}`, topics: await Responses.responsesToTopic(responses) };
+    return { msg: `Successfully sorted responses to ${topic.title} by ${sort}`, responses: await Responses.responsesToTopic(responses) };
   }
 
   ///// FILTERING
