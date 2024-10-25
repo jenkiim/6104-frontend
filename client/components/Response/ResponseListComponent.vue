@@ -1,17 +1,29 @@
 <script setup lang="ts">
 import { fetchy } from "@/utils/fetchy";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import LabelFilterDropDown from "../Label/LabelFilterDropDown.vue";
+import OpinionDegreeSlider from "../Side/OpinionDegreeSlider.vue";
 import SortDropdown from "../Sorting/SortDropdown.vue";
 import ResponseComponent from "./ResponseComponent.vue";
 
-// const { isLoggedIn } = storeToRefs(useUserStore());
 const props = defineProps(["topic"]);
 const sort = ref("newest");
 const filters = ref<string[]>([]);
-
+const degree = ref("none");
+const sideLeft = ref("");
+const sideRight = ref("");
 const loaded = ref(false);
 let responses = ref<Array<Record<string, string>>>([]);
+const sideOptions = ref<Array<Record<string, string>>>([]);
+const sidesLoaded = computed(() => sideOptions.value.length > 0);
+
+const sortOptions = [
+  { display: "Newest", value: "newest" },
+  { display: "Random", value: "random" },
+  { display: "Upvotes", value: "upvotes" },
+  { display: "Downvotes", value: "downvotes" },
+  { display: "Controversial", value: "controversial" },
+];
 
 const getResponses = async (topic: string, sort: string, selectedFilters?: string[]) => {
   const apiUrl = `/api/responses/topic/${topic}/sort`;
@@ -51,23 +63,36 @@ const handleFilterResponses = async (selectedFilters: string[]) => {
   await getResponses(props.topic, sort.value, selectedFilters);
 };
 
+const setDegree = (newDegree: string) => {
+  degree.value = newDegree;
+};
+
 onBeforeMount(async () => {
   await getResponses(props.topic, sort.value);
   loaded.value = true;
+  const regex = /(.+)\s+vs\.\s+(.+)/i;
+  const match = props.topic.match(regex);
+  sideLeft.value = match[1].trim();
+  sideRight.value = match[2].trim();
+  sideOptions.value = [
+    { display: `Strongly Prefer ${sideLeft.value}`, value: "Strongly Disagree" },
+    { display: `Prefer ${sideLeft.value}`, value: "Disagree" },
+    { display: `Slightly Prefer ${sideLeft.value}`, value: "Slightly Disagree" },
+    { display: "Neutral", value: "Neutral" },
+    { display: `Slightly Prefer ${sideRight.value}`, value: "Slightly Agree" },
+    { display: `Prefer ${sideRight.value}`, value: "Agree" },
+    { display: `Strongly Prefer ${sideRight.value}`, value: "Strongly Agree" },
+    { display: "Undecided", value: "Undecided" },
+  ];
 });
-
-const options = [
-  { display: "Newest", value: "newest" },
-  { display: "Random", value: "random" },
-  { display: "Upvotes", value: "upvotes" },
-  { display: "Downvotes", value: "downvotes" },
-  { display: "Controversial", value: "controversial" },
-];
 </script>
 
 <template>
+  <div v-if="sidesLoaded">
+    <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" :addOrFilter="'filter'" :options="sideOptions" @updateDegree="setDegree" />
+  </div>
   <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
-  <SortDropdown :sortOptions="options" @sortItems="handleSortResponses" />
+  <SortDropdown :sortOptions="sortOptions" @sortItems="handleSortResponses" />
   <div class="row">
     <h2>Responses:</h2>
   </div>

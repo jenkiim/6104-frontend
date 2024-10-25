@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { defineEmits, defineProps, ref } from "vue";
+import { defineEmits, defineProps, onBeforeMount, ref } from "vue";
 
-const props = defineProps(["sideLeft", "sideRight"]);
+const props = defineProps(["sideLeft", "sideRight", "addOrFilter", "options"]);
 const emit = defineEmits(["updateDegree"]);
 const degree = ref("");
 
-const options = [
-  { display: `Strongly Prefer ${props.sideLeft}`, value: "Strongly Disagree" },
-  { display: `Prefer ${props.sideLeft}`, value: "Disagree" },
-  { display: `Slightly Prefer ${props.sideLeft}`, value: "Slightly Disagree" },
-  { display: "Neutral", value: "Neutral" },
-  { display: `Slightly Prefer ${props.sideRight}`, value: "Slightly Agree" },
-  { display: `Prefer ${props.sideRight}`, value: "Agree" },
-  { display: `Strongly Prefer ${props.sideRight}`, value: "Strongly Agree" },
-];
-
-async function onUpdateDegree(newDegree: string) {
+const onUpdateDegree = async (newDegree: string) => {
+  if (props.addOrFilter === "filter") {
+    if (degree.value === newDegree) {
+      degree.value = "none"; // Deselect if already selected
+    } else {
+      degree.value = newDegree;
+    }
+  }
   emit("updateDegree", newDegree);
-}
+};
+
+onBeforeMount(() => {
+  if (props.addOrFilter === "filter") {
+    degree.value = "none";
+  }
+});
 </script>
 
 <template>
@@ -35,20 +38,34 @@ async function onUpdateDegree(newDegree: string) {
   justify-content: space-between;
   width: 100%;
 }
+
 .opinion-button {
   text-align: center;
 }
+
 input[type="radio"] {
   display: none;
 }
+
 input[type="radio"] + label {
-  padding: 5px 10px;
+  padding: 8px 12px;
   border: 1px solid #ccc;
+  border-radius: 5px;
   cursor: pointer;
+  user-select: none;
 }
+
+input[type="radio"] + label:hover {
+  background-color: #e6e6e6;
+}
+
 input[type="radio"]:checked + label {
   background-color: #007bff;
   color: white;
   border-color: #007bff;
+}
+
+input[type="radio"]:checked + label:hover {
+  background-color: #0056b3;
 }
 </style>

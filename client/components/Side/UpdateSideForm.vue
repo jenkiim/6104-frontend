@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from "@/router";
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 import OpinionDegreeSlider from "./OpinionDegreeSlider.vue";
 
@@ -8,6 +8,8 @@ const props = defineProps(["topicTitle"]);
 const degree = ref("");
 const sideLeft = ref("");
 const sideRight = ref("");
+const sideOptions = ref<Array<Record<string, string>>>([]);
+const sidesLoaded = computed(() => sideOptions.value.length > 0);
 
 /// set the sides of the topic
 onBeforeMount(() => {
@@ -15,6 +17,15 @@ onBeforeMount(() => {
   const match = props.topicTitle.match(regex);
   sideLeft.value = match[1].trim();
   sideRight.value = match[2].trim();
+  sideOptions.value = [
+    { display: `Strongly Prefer ${sideLeft.value}`, value: "Strongly Disagree" },
+    { display: `Prefer ${sideLeft.value}`, value: "Disagree" },
+    { display: `Slightly Prefer ${sideLeft.value}`, value: "Slightly Disagree" },
+    { display: "Neutral", value: "Neutral" },
+    { display: `Slightly Prefer ${sideRight.value}`, value: "Slightly Agree" },
+    { display: `Prefer ${sideRight.value}`, value: "Agree" },
+    { display: `Strongly Prefer ${sideRight.value}`, value: "Strongly Agree" },
+  ];
 });
 
 const createSide = async (topicTitle: string, newside: string) => {
@@ -47,7 +58,9 @@ const emptyForm = () => {
   <form @submit.prevent="createSide(props.topicTitle, degree)">
     <h1>What side are you on?</h1>
     <h2>{{ props.topicTitle }}</h2>
-    <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" @updateDegree="setDegree"></OpinionDegreeSlider>
+    <div v-if="sidesLoaded">
+      <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" @updateDegree="setDegree" :addOrFilter="'add'" :options="sideOptions" />
+    </div>
     <button type="submit" class="pure-button-primary pure-button">Decided!</button>
     <h2>Undecided? Click here!</h2>
     <button type="submit" class="pure-button-primary pure-button" @click="setDegreeUndecided()">Undecided!</button>
