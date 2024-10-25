@@ -91,6 +91,7 @@ class Routes {
     }
     return Responses.topics(topics);
   }
+
   /**
    * @param title The title of the topic. Must not be empty.
    * @param description The description of the topic. Can be empty.
@@ -456,15 +457,16 @@ class Routes {
   ///// SORTING
 
   @Router.get("/topics/sort")
-  async sortTopic(sort: string) {
+  @Router.validate(z.object({ sort: z.string(), search: z.string().optional() }))
+  async sortTopic(sort: string, search?: string) {
     // sort can be by engagement or random
     // return all topics in given sorted order
     const sortedByEngagement = await RespondingToTopic.getSortedByResponseCount();
-    const topics = await Topicing.getSorted(sort, sortedByEngagement);
+    const topics = await Topicing.getSorted(sort, search, sortedByEngagement);
     return { msg: `Successfully sorted topics by ${sort}`, topics: topics };
   }
 
-  @Router.get("/responses/topic/:topicid/sort/:sort")
+  @Router.get("/responses/topic/:topicid/sort")
   async sortResponsesOnTopic(topicid: string, sort: string) {
     // sort can be by upvotes, downvotes, controversial (abs(upvotes - downvotes)), time, random
     // return responses to topic in given sorted order
