@@ -527,6 +527,15 @@ class Routes {
     const side = await Sideing.getSideByUserAndItem(user._id, response.target);
     return { msg: "Successfully got the side of the user on the given issue!", side: side.degree };
   }
+
+  //// For Non-Biased Samples page
+  @Router.get("/responses/topic/random")
+  async getRandomResponsesToTopics() {
+    const responses = await RespondingToTopic.getRandomResponses();
+    const responseFormatted = await Responses.responsesToTopic(responses);
+    const finalResponses = responseFormatted.filter((response) => response.issue !== "DELETED_TOPIC");
+    return { msg: "Successfully got random responses to topics!", responses: finalResponses };
+  }
 }
 
 /** The web app. */

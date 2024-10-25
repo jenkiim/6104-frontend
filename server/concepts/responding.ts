@@ -78,6 +78,12 @@ export default class RespondingConcept {
     return responses;
   }
 
+  async idsToResponsesNoSort(ids: ObjectId[]) {
+    const responses = await Promise.all(ids.map((id) => this.responses.readOne({ _id: id })));
+    const finalResponses: ResponseDoc[] = responses.filter((response) => response !== null);
+    return finalResponses;
+  }
+
   async updateTitle(_id: ObjectId, title?: string) {
     // Note that if content or options is undefined, those fields will *not* be updated
     // since undefined values for partialUpdateOne are ignored.
@@ -114,18 +120,21 @@ export default class RespondingConcept {
       case "random":
         return await this.responses.getRandomDocsWithTarget(50, target);
       case "upvotes": {
-        /////// don't get responses without upvotes :(
         return await this.idsToResponses(sortByUpvote);
       }
       case "downvotes": {
         return (await this.idsToResponses(sortByUpvote)).reverse();
       }
       case "controversial": {
-        return await this.idsToResponses(sortByControversy);
+        return await this.idsToResponsesNoSort(sortByControversy);
       }
       default:
         throw new BadValuesError(`${sort} is an invalid sort option`);
     }
+  }
+
+  async getRandomResponses() {
+    return await this.responses.getRandomDocs(undefined);
   }
 
   async inCollection(_id: ObjectId) {

@@ -153,9 +153,10 @@ export default class UpvotingConcept {
 
   async sortItemsByControversy(items: ObjectId[]) {
     const itemIds = await this.upvotes.getSortedByControversyForItems(items);
+    const stringItemIds = itemIds.map((id) => id.toString());
     for (const id of items) {
-      if (!itemIds.includes(id)) {
-        itemIds.push(id);
+      if (!stringItemIds.includes(id.toString())) {
+        itemIds.unshift(id);
       }
     }
     return itemIds;

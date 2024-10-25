@@ -156,10 +156,21 @@ export default class DocCollection<Schema extends BaseDoc> {
 
   /**
    * Get random documents from the collection.
-   * @param limit Number of documents to return.
+   * @param limit Number of documents to return. If undefined, returns all matching documents.
    */
-  async getRandomDocs(search: string | undefined, limit: number): Promise<Schema[]> {
-    return await this.collection.aggregate<Schema>([...(search ? [{ $match: { title: { $regex: search, $options: "i" } } }] : []), { $sample: { size: limit } }]).toArray();
+  async getRandomDocs(search: string | undefined, limit?: number): Promise<Schema[]> {
+    const pipeline = [];
+
+    if (search) {
+      pipeline.push({ $match: { title: { $regex: search, $options: "i" } } });
+    }
+
+    // Only add $sample stage if a limit is specified
+    if (limit !== undefined) {
+      pipeline.push({ $sample: { size: limit } });
+    }
+
+    return await this.collection.aggregate<Schema>(pipeline).toArray();
   }
 
   async getRandomDocsWithTarget(limit: number, target: ObjectId): Promise<Schema[]> {
@@ -228,11 +239,11 @@ export default class DocCollection<Schema extends BaseDoc> {
           $project: {
             _id: 0, // Exclude the default _id field
             item: 1, // Include only the item field in the output
+            absoluteCount: 1, // Include only the absoluteCount field in the output
           },
         },
       ])
       .toArray();
-
     return results.map((result) => result.item);
   }
 }
