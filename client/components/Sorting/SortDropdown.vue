@@ -3,6 +3,7 @@ import { defineProps, ref } from "vue";
 
 const isDropdownOpen = ref(false);
 const props = defineProps(["sortOptions"]);
+const currentSort = ref("Sort Topics");
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
@@ -12,6 +13,7 @@ const emit = defineEmits(["sortItems"]);
 
 const selectSortOption = (option: string) => {
   emit("sortItems", option);
+  currentSort.value = option.charAt(0).toUpperCase() + option.slice(1); // captialize the first letter
   isDropdownOpen.value = false; // close the dropdown after selection
 };
 </script>
@@ -19,9 +21,8 @@ const selectSortOption = (option: string) => {
 <template>
   <div class="sort-dropdown">
     <button @click="toggleDropdown" class="sort-button">
-      Sort Topics
-      <span v-if="isDropdownOpen">▲</span>
-      <span v-else>▼</span>
+      <span v-if="isDropdownOpen">Sort Topics ▲</span>
+      <span v-else>{{ currentSort }}▼</span>
     </button>
     <div v-if="isDropdownOpen" class="dropdown-menu">
       <article v-for="(option, index) in props.sortOptions" :key="index">
