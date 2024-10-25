@@ -1,35 +1,58 @@
 <script setup lang="ts">
 import { fetchy } from "@/utils/fetchy";
 import { onBeforeMount, ref } from "vue";
+import LabelFilterDropDown from "../Label/LabelFilterDropDown.vue";
 import SortDropdown from "../Sorting/SortDropdown.vue";
 import ResponseComponent from "./ResponseComponent.vue";
 
 // const { isLoggedIn } = storeToRefs(useUserStore());
 const props = defineProps(["topic"]);
 const sort = ref("newest");
+const filters = ref<string[]>([]);
 
 const loaded = ref(false);
 let responses = ref<Array<Record<string, string>>>([]);
 
-const getResponses = async (sort: string, topic: string) => {
+const getResponses = async (topic: string, sort: string, selectedFilters?: string[]) => {
   const apiUrl = `/api/responses/topic/${topic}/sort`;
   let query: Record<string, string> = { sort };
-  let responseResults;
+  let responseSortResults;
   try {
-    responseResults = await fetchy(apiUrl, "GET", { query });
+    responseSortResults = await fetchy(apiUrl, "GET", { query });
   } catch (_) {
     return;
   }
-  responses.value = responseResults.responses;
+  // only include responses that match the selected filters
+  if (selectedFilters) {
+    let filteredResponses = new Set(responseSortResults.responses.map((response: Record<string, string>) => response.title));
+    for (const index in selectedFilters) {
+      const filter = selectedFilters[index];
+      let responseFilterResults = [];
+      try {
+        responseFilterResults = await fetchy(`/api/responses/topic/${topic}/label/${filter}`, "GET");
+      } catch (_) {
+        return;
+      }
+      const responseFilterResultSet = new Set(responseFilterResults.responses.map((response: Record<string, string>) => response.title));
+      filteredResponses = new Set([...filteredResponses].filter((response) => responseFilterResultSet.has(response)));
+    }
+    responseSortResults.responses = responseSortResults.responses.filter((response: Record<string, string>) => filteredResponses.has(response.title));
+  }
+  responses.value = responseSortResults.responses;
 };
 
 const handleSortResponses = async (option: string) => {
   sort.value = option;
-  await getResponses(option, props.topic);
+  await getResponses(props.topic, option, filters.value);
+};
+
+const handleFilterResponses = async (selectedFilters: string[]) => {
+  filters.value = selectedFilters;
+  await getResponses(props.topic, sort.value, selectedFilters);
 };
 
 onBeforeMount(async () => {
-  await getResponses(sort.value, props.topic);
+  await getResponses(props.topic, sort.value);
   loaded.value = true;
 });
 
@@ -43,6 +66,7 @@ const options = [
 </script>
 
 <template>
+  <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
   <SortDropdown :sortOptions="options" @sortItems="handleSortResponses" />
   <div class="row">
     <h2>Responses:</h2>

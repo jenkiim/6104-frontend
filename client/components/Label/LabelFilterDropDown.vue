@@ -34,15 +34,12 @@ const addFilter = (label: string) => {
   if (!selectedFilters.value.includes(label) && selectedFilters.value.length < 3) {
     selectedFilters.value.push(label);
   }
-};
-
-const applyFilters = () => {
-  showDropdown.value = false;
   emit("filterItems", toRaw(selectedFilters.value));
 };
 
 const removeSelectedFilter = (filter: string) => {
   selectedFilters.value = selectedFilters.value.filter((selectedFilter) => selectedFilter !== filter);
+  emit("filterItems", toRaw(selectedFilters.value));
 };
 
 onBeforeMount(async () => {
@@ -63,7 +60,7 @@ onBeforeMount(async () => {
             {{ label }}
           </li>
         </ul>
-        <button @click="applyFilters" class="done-button">Done</button>
+        <button @click="toggleDropdown" class="done-button">Close</button>
       </div>
     </div>
     <div class="selected-filters">

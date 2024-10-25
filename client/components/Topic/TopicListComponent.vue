@@ -20,7 +20,6 @@ const filters = ref<string[]>([]);
 
 // Function to fetch topics, optionally sorting by a specified criterion
 const getTopics = async (sort: string, search?: string, selectedFilters?: string[]) => {
-  // /responses/topic/:topicid/sort     sort
   let query: Record<string, string> = search !== undefined ? { sort, search } : { sort };
   let topicSortResults;
   try {
