@@ -23,13 +23,17 @@ onBeforeMount(async () => {
   await getTopic();
 });
 
-function navigateToAddResponse(id: string) {
+const navigateToAddResponse = async (id: string) => {
   void router.push({ name: "AddResponseToResponsePage", params: { id: id } });
-}
+};
+
+const navigateToTopic = (title: string) => {
+  void router.push({ name: "TopicPage", params: { title: title } });
+};
 </script>
 
 <template>
-  <h1>{{ props.response.issue }}</h1>
+  <button @click="navigateToTopic(props.response.issue)">{{ props.response.issue }}</button>
   <h2>{{ props.response.title }}</h2>
   <p>{{ props.response.content }}</p>
   <div class="base">
