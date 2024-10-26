@@ -78,8 +78,10 @@ const getVote = async () => {
 };
 
 onBeforeMount(async () => {
-  await getCount();
-  await getVote();
+  if (!props.stripped) {
+    await getCount();
+    await getVote();
+  }
 });
 </script>
 

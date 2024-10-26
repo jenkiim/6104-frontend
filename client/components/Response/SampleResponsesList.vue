@@ -32,10 +32,10 @@ const getResponses = async (selectedFilters?: string[]) => {
         } catch (_) {
           return;
         }
-        const responseFilterResultSet = new Set(responseFilterResults.responses.map((response: Record<string, string>) => response.title));
+        const responseFilterResultSet = new Set(responseFilterResults.responses.map((response: Record<string, string>) => response._id.toString()));
         filteredResponses = new Set([...filteredResponses].filter((response) => responseFilterResultSet.has(response)));
       }
-      responseResults = responseResults.filter((response: Record<string, string>) => filteredResponses.has(response.title));
+      responseResults = responseResults.filter((response: Record<string, string>) => filteredResponses.has(response._id.toString()));
     }
   }
   if (isLoggedIn) {
@@ -67,7 +67,7 @@ onBeforeMount(async () => {
   </div>
   <section class="responses" v-if="loaded && responses.length !== 0">
     <article v-for="response in responses" :key="response._id">
-      <StrippedResponseComponent :response="response" @refreshResponses="getResponses()" />
+      <StrippedResponseComponent :response="response" />
     </article>
   </section>
   <p v-else-if="loaded">No responses found</p>

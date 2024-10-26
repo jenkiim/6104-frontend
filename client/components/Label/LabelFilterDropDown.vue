@@ -2,9 +2,8 @@
 import { fetchy } from "@/utils/fetchy";
 import { computed, defineEmits, defineProps, onBeforeMount, ref, toRaw } from "vue";
 
-// const allLabels = ["politics", "economy", "environment", "education", "health", "technology"];
 const props = defineProps(["topicOrResponse"]);
-const allLabels = ref<string[]>(["politics", "economy", "environment", "education", "health", "technology"]);
+const allLabels = ref<string[]>([]);
 const selectedFilters = ref<string[]>([]);
 const searchQuery = ref("");
 const showDropdown = ref(false);

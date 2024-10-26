@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 import { onBeforeMount, ref } from "vue";
 import router from "../../router";
 import { fetchy } from "../../utils/fetchy";
@@ -8,18 +6,7 @@ import DisplayLabels from "../Label/DisplayLabels.vue";
 import UpvotingComponent from "../Upvoting/UpvotingComponent.vue";
 
 const props = defineProps(["response"]);
-const emit = defineEmits(["refreshResponses"]);
-const { currentUsername } = storeToRefs(useUserStore());
 const topic = ref("");
-
-const deleteResponse = async () => {
-  try {
-    await fetchy(`/api/responses/topic/${props.response._id}`, "DELETE");
-  } catch {
-    return;
-  }
-  emit("refreshResponses");
-};
 
 const getTopic = async () => {
   const query = { id: props.response.target };
@@ -48,9 +35,6 @@ function navigateToAddResponse(id: string) {
   <div class="base">
     <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
     <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
-    <menu class="buttons" v-if="props.response.author == currentUsername">
-      <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
-    </menu>
     <UpvotingComponent :responseId="props.response._id" :stripped="true" />
   </div>
 </template>

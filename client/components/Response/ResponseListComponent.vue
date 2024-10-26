@@ -37,7 +37,7 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
   }
   // only include responses that match the selected filters
   if (selectedFilters) {
-    let filteredResponses = new Set(responseSortResults.map((response: Record<string, string>) => response.title));
+    let filteredResponses = new Set(responseSortResults.map((response: Record<string, string>) => response._id.toString()));
     for (const index in selectedFilters) {
       const filter = selectedFilters[index];
       let responseFilterResults = [];
@@ -46,10 +46,10 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
       } catch (_) {
         return;
       }
-      const responseFilterResultSet = new Set(responseFilterResults.responses.map((response: Record<string, string>) => response.title));
+      const responseFilterResultSet = new Set(responseFilterResults.responses.map((response: Record<string, string>) => response._id.toString()));
       filteredResponses = new Set([...filteredResponses].filter((response) => responseFilterResultSet.has(response)));
     }
-    responseSortResults = responseSortResults.filter((response: Record<string, string>) => filteredResponses.has(response.title));
+    responseSortResults = responseSortResults.filter((response: Record<string, string>) => filteredResponses.has(response._id.toString()));
   }
   if (degree) {
     const idsToInclude = new Set();

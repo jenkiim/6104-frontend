@@ -26,7 +26,6 @@ const getLabels = async (title: string, id: string) => {
 };
 
 const removeLabel = async (index: number) => {
-  // this is the api format = /label/:label/remove/topic/:topic
   const apiUrl = `/api/label/${labels.value[index]}/remove/${props.topicOrResponse}/${props.item.title}`;
   try {
     await fetchy(apiUrl, "PATCH");
