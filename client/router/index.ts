@@ -19,6 +19,7 @@ const router = createRouter({
       path: "/",
       name: "Home",
       component: HomeView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/setting",
@@ -30,30 +31,35 @@ const router = createRouter({
       path: "/samples",
       name: "NonBiasedSamples",
       component: NonBiasedSamplesView,
+      meta: { requiresAuth: true },
       props: true,
     },
     {
       path: "/topic/:title",
       name: "TopicPage",
       component: TopicView,
+      meta: { requiresAuth: true },
       props: true,
     },
     {
       path: "/responseToResponse/:id",
       name: "AddResponseToResponsePage",
       component: AddResponseToResponseView,
+      meta: { requiresAuth: true },
       props: true,
     },
     {
       path: "/responseToTopic/:topicTitle",
       name: "AddResponseToTopicPage",
       component: AddResponseToTopicView,
+      meta: { requiresAuth: true },
       props: true,
     },
     {
       path: "/updateSide/:topicTitle",
       name: "UpdateSidePage",
       component: UpdateSideView,
+      meta: { requiresAuth: true },
       props: true,
     },
     {

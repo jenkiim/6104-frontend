@@ -31,10 +31,10 @@ onBeforeMount(async () => {
         </RouterLink>
       </div>
       <ul>
-        <li>
+        <li v-if="isLoggedIn">
           <RouterLink :to="{ name: 'Home' }" :class="{ underline: currentRouteName == 'Home' }"> Home </RouterLink>
         </li>
-        <li>
+        <li v-if="isLoggedIn">
           <RouterLink :to="{ name: 'NonBiasedSamples' }" :class="{ underline: currentRouteName == 'NonBiasedSamples' }"> Non-Biased Samples </RouterLink>
         </li>
         <li v-if="isLoggedIn">
