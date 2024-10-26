@@ -48,11 +48,15 @@ function navigateToAddResponse(id: string) {
   <p>{{ props.response.content }}</p>
   <div class="base">
     <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
-    <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
-    <menu class="buttons" v-if="props.response.author == currentUsername">
-      <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
-    </menu>
-    <UpvotingComponent :responseId="props.response._id" />
+    <div class="response-attributes">
+      <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
+      <menu class="buttons" v-if="props.response.author == currentUsername">
+        <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
+      </menu>
+    </div>
+    <div class="upvoting-container">
+      <UpvotingComponent :responseId="props.response._id" />
+    </div>
     <section class="responses" v-if="responsesToCurrent.length !== 0">
       <article v-for="response in responsesToCurrent" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
@@ -103,5 +107,15 @@ menu {
 
 .base article:only-child {
   margin-left: auto;
+}
+
+.upvoting-container {
+  width: 10%;
+}
+
+.response-attributes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

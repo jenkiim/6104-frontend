@@ -10,7 +10,8 @@ const emit = defineEmits(["getTopicsByText"]);
     <fieldset>
       <!-- <legend>Search</legend> -->
       <input id="text" type="text" v-model="text" placeholder="Search" />
-      <button type="submit" class="pure-button pure-button-primary">Search</button>
+      <button type="submit">Search</button>
+      <!-- class="pure-button pure-button-primary" -->
     </fieldset>
   </form>
 </template>

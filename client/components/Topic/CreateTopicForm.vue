@@ -52,7 +52,7 @@ const emptyForm = () => {
       <button @click="removeLabel(index)" class="delete-btn">x</button>
     </span>
     <AddLabelNewForm :topicOrResponse="'topic'" @update-labels="updateLabels" />
-    <button type="submit" class="pure-button-primary pure-button">Create Topic</button>
+    <button type="submit">Create Topic</button>
   </form>
 </template>
 

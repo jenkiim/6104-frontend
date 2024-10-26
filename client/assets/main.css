@@ -1,17 +1,46 @@
 /* Add some global styles here! */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600;700&display=swap");
 
 :root {
   --red: rgb(208, 67, 12);
   --base-bg: #f1f3f5;
+  --signature: #2f11c3;
+  --signature-lighter: #4d36c2;
+  --signature-light: #9593c6;
+  --signature-lightest: #a3a2c8;
+  --signature-blue: #0d6efd;
+  /* font-family: 'IBM Plex Serif', serif; */
+  font-family: 'Work Sans', sans-serif;
+  /* font-family: 'Roboto', sans-serif; */
 }
 
 button.btn-small {
   font-size: 80%;
 }
 
+button.btn-small:hover {
+  background-color: rgb(169, 169, 169);
+}
+
 button.button-error {
   color: white;
   background: var(--red);
+}
+
+button {
+  font-size: 1em;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 0.25em;
+  cursor: pointer;
+  background-color: var(--signature);
+  color: white;
+}
+
+button:hover {
+  background-color: var(--signature-lighter);
 }
 
 a.button {
@@ -29,4 +58,8 @@ a.button {
   justify-content: center;
   align-items: center;
   gap: 1em;
+}
+
+.page-description {
+  text-align: center;
 }

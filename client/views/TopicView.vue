@@ -44,21 +44,42 @@ onBeforeMount(async () => {
 <template>
   <main>
     <h1>{{ props.title }}</h1>
-    <p v-if="loaded">{{ description }}</p>
+    <p class="page-description" v-if="loaded">{{ description }}</p>
     <p v-else>Loading...</p>
-    <DisplayLabels v-if="loaded" :item="topicObject" :topicOrResponse="'topic'" />
-    <button v-if="isLoggedIn" @click="navigateToUpdateSide">Update Side</button>
-    <button v-if="isLoggedIn" @click="navigateToAddResponse">Respond to {{ props.title }}</button>
+    <div class="labels">
+      <DisplayLabels v-if="loaded" :item="topicObject" :topicOrResponse="'topic'" />
+    </div>
+    <div class="actions">
+      <button v-if="isLoggedIn" @click="navigateToUpdateSide">Update Side</button>
+      <button v-if="isLoggedIn" @click="navigateToAddResponse">Respond to Topic</button>
+    </div>
     <ResponseListComponent :topic="props.title" />
   </main>
 </template>
 
 <style scoped>
+main {
+  margin: 0 10%;
+  display: flex;
+  flex-direction: column;
+}
 h1 {
   text-align: center;
 }
 
 p {
   padding: 2em;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.labels {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1em;
 }
 </style>

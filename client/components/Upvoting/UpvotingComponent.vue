@@ -88,33 +88,30 @@ onBeforeMount(async () => {
 <template>
   <div class="voting-container">
     <!-- Upvote Button -->
-    <button :class="{ active: vote === 'upvote' }" @click="toggleUpvote">▲</button>
+    <button class="arrow" :class="{ active: vote === 'upvote' }" @click="toggleUpvote">▲</button>
 
     <!-- Display the vote count -->
     <div v-if="!props.stripped" class="vote-count">{{ count }}</div>
 
     <!-- Downvote Button -->
-    <button :class="{ active: vote === 'downvote' }" @click="toggleDownvote">▼</button>
+    <button class="arrow" :class="{ active: vote === 'downvote' }" @click="toggleDownvote">▼</button>
   </div>
 </template>
 
 <style scoped>
 .voting-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 }
 
-button {
+.arrow {
   background: none;
-  border: none;
+  border: black 1px solid;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
-}
-
-button.active {
-  color: green; /* Change to indicate active upvote */
+  color: black;
+  padding: 2px 4px;
 }
 
 button.active + .vote-count {

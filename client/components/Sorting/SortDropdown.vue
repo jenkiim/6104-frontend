@@ -38,14 +38,14 @@ const selectSortOption = (option: string) => {
   display: inline-block;
 }
 
-.sort-button {
+/* .sort-button {
   background-color: #007bff;
   color: white;
   padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
+} */
 
 .sort-button span {
   margin-left: 10px;

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// import router from "@/router";
-// import { ref } from "vue";
-// import { fetchy } from "../utils/fetchy";
 import UpdateSideForm from "@/components/Side/UpdateSideForm.vue";
 
 const props = defineProps(["topicTitle"]);
