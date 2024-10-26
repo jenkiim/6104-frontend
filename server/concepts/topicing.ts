@@ -142,7 +142,7 @@ export default class TopicingConcept {
   }
 
   private async assertTitleCorrectFormat(title: string) {
-    const regex = /.+\s+vs\.\s+.+/i; // The `i` flag makes it case-insensitive
+    const regex = /\S+.*\S*\s+vs\.\s+\S+.*\S*/i; // The `i` flag makes it case-insensitive
     if (!regex.test(title)) {
       throw new NotAllowedError("Title must be in the format 'X vs. Y'");
     }

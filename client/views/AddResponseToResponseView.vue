@@ -33,8 +33,8 @@ const emptyForm = () => {
   <main v-if="isLoggedIn">
     <h1>Write a response!</h1>
     <form @submit.prevent="addResponse(title, content)">
-      <textarea id="content" v-model="title" placeholder="Title" required> </textarea>
-      <textarea id="content" v-model="content" placeholder="Content" required> </textarea>
+      <input id="content" v-model="title" placeholder="Title" required maxlength="70" />
+      <input id="content" v-model="content" placeholder="Content" required maxlength="200" />
       <div class="base">
         <menu>
           <li><button class="btn-small pure-button-primary pure-button" type="submit">Respond</button></li>

@@ -25,7 +25,7 @@ const deleteTopic = async () => {
     <DisplayLabels :item="props.topic" :topicOrResponse="'topic'" />
     <menu v-if="props.topic.author == currentUsername">
       <!-- <li><button class="btn-small pure-button" @click="emit('editTopic', props.topic._id)">Edit</button></li> -->
-      <li><button class="button-error btn-small pure-button" @click="deleteTopic">Delete</button></li>
+      <li><button class="button-error btn-small pure-button" @click="deleteTopic" @click.stop="">Delete</button></li>
     </menu>
     <!-- <article class="timestamp">
       <p v-if="props.topic.dateCreated !== props.topic.dateUpdated">Edited on: {{ formatDate(props.topic.dateUpdated) }}</p>
