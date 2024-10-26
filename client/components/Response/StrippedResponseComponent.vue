@@ -42,7 +42,7 @@ function navigateToAddResponse(id: string) {
 </script>
 
 <template>
-  <h1>{{ topic }}</h1>
+  <h1>{{ props.response.issue }}</h1>
   <h2>{{ props.response.title }}</h2>
   <p>{{ props.response.content }}</p>
   <div class="base">
