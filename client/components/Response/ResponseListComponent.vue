@@ -114,7 +114,7 @@ onBeforeMount(async () => {
   </div>
   <section class="responses" v-if="loaded && responses.length !== 0">
     <article v-for="response in responses" :key="response._id">
-      <ResponseComponent :response="response" @refreshResponses="getResponses(sort, props.topic)" />
+      <ResponseComponent :response="response" @refreshResponses="getResponses(props.topic, sort)" />
     </article>
   </section>
   <p v-else-if="loaded">No responses found</p>

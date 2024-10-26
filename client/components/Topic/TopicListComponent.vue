@@ -80,7 +80,7 @@ const options = [
 <template>
   <section v-if="isLoggedIn">
     <h2>Create a topic:</h2>
-    <CreateTopicForm @refreshTopics="getTopics" />
+    <CreateTopicForm @refreshTopics="getTopics(sort, undefined, filters)" />
   </section>
 
   <LabelFilterDropDown @filterItems="handleFilterTopics" :topicOrResponse="'topic'" />
