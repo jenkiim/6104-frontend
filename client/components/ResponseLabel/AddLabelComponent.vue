@@ -29,10 +29,6 @@ const toggleLabel = (label: string) => {
 
 const addLabel = async () => {
   if (newLabel.value && !allLabels.value.includes(newLabel.value)) {
-    if (newLabel.value.length > 20) {
-      alert("Label must be less than 20 characters");
-      return;
-    }
     allLabels.value.push(newLabel.value);
     try {
       await fetchy("/api/label/response", "POST", {
@@ -64,7 +60,7 @@ onBeforeMount(async () => {
       </div>
     </div>
     <div class="new-label">
-      <input type="text" v-model="newLabel" placeholder="Create a new label" />
+      <input type="text" v-model="newLabel" placeholder="Create a new label" maxlength="20" />
       <button @click.prevent="addLabel" class="add-button">Add</button>
     </div>
   </div>

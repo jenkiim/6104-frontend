@@ -23,10 +23,6 @@ const addOrAttachLabel = async () => {
   const label = newLabel.value;
   // if label doesn't exist, make one
   if (!allLabels.value.includes(label)) {
-    if (newLabel.value.length > 20) {
-      alert("Label must be less than 20 characters");
-      return;
-    }
     // new label
     try {
       await fetchy(`/api/label/${props.topicOrResponse}`, "POST", {
@@ -62,7 +58,7 @@ onBeforeMount(async () => {
 <template>
   <div class="label-selector">
     <div class="new-label">
-      <input type="text" v-model="newLabel" placeholder="Type and add a new label" />
+      <input type="text" v-model="newLabel" placeholder="Type and add a new label" maxlength="20" />
       <button @click.prevent="addOrAttachLabel" class="add-button">Add</button>
     </div>
   </div>
