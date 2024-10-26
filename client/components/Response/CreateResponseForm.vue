@@ -45,9 +45,9 @@ const updateLabels = (selectedLabels: string[]) => {
 <template>
   <form @submit.prevent="createResponse(title, content)">
     <input id="title" v-model="title" placeholder="Title..." required maxlength="70" />
-    <input id="content" v-model="content" placeholder="Thoughts!" required maxlength="200" />
+    <textarea id="content" v-model="content" placeholder="Thoughts!" required maxlength="1000"></textarea>
     <AddLabel @updateLabels="updateLabels" />
-    <button type="submit" class="pure-button-primary pure-button">Respond</button>
+    <button type="submit">Respond</button>
   </form>
 </template>
 
@@ -70,12 +70,19 @@ textarea {
   resize: none;
 }
 
+input {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.5em;
+  resize: none;
+}
+
 #title {
   height: 1em;
 }
 
 #content {
-  height: 4em;
+  text-wrap: wrap;
 }
 
 .required {

@@ -19,18 +19,15 @@ const deleteTopic = async () => {
 </script>
 
 <template>
-  <h1>{{ props.topic.title }}</h1>
-  <p class="author">{{ props.topic.author }}</p>
-  <div class="base">
-    <DisplayLabels :item="props.topic" :topicOrResponse="'topic'" />
-    <menu v-if="props.topic.author == currentUsername">
-      <!-- <li><button class="btn-small pure-button" @click="emit('editTopic', props.topic._id)">Edit</button></li> -->
-      <li><button class="button-error btn-small pure-button" @click="deleteTopic" @click.stop="">Delete</button></li>
-    </menu>
-    <!-- <article class="timestamp">
-      <p v-if="props.topic.dateCreated !== props.topic.dateUpdated">Edited on: {{ formatDate(props.topic.dateUpdated) }}</p>
-      <p>Created on: {{ formatDate(props.topic.dateCreated) }}</p>
-    </article> -->
+  <div class="topic-container">
+    <h1>{{ props.topic.title }}</h1>
+    <p class="author">{{ props.topic.author }}</p>
+    <div class="base">
+      <DisplayLabels :item="props.topic" :topicOrResponse="'topic'" />
+      <menu v-if="props.topic.author == currentUsername">
+        <li><button class="button-error btn-small pure-button" @click="deleteTopic" @click.stop="">Delete</button></li>
+      </menu>
+    </div>
   </div>
 </template>
 
@@ -41,10 +38,18 @@ p {
 
 h1 {
   font-size: 1.5em;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
 .author {
   font-size: 1.2em;
+}
+
+.topic-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
 menu {

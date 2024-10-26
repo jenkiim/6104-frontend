@@ -72,9 +72,9 @@ const emptyForm = () => {
     <div v-if="sidesLoaded">
       <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" @updateDegree="setDegree" :addOrFilter="'add'" :options="sideOptions" :currentDegree="degree" />
     </div>
-    <button type="submit" class="pure-button-primary pure-button">Decided!</button>
+    <button type="submit">Decided!</button>
     <h2>Undecided? Click here!</h2>
-    <button type="submit" class="pure-button-primary pure-button" @click="setDegreeUndecided()">Undecided!</button>
+    <button type="submit" @click="setDegreeUndecided()">Undecided!</button>
   </form>
 </template>
 
@@ -86,6 +86,7 @@ form {
   flex-direction: column;
   gap: 0.5em;
   padding: 1em;
+  align-items: center;
 }
 
 textarea {
@@ -107,5 +108,14 @@ textarea {
 
 .required {
   color: rgb(240, 65, 65);
+}
+
+h2 {
+  text-align: center;
+}
+
+button {
+  width: 20%;
+  font-size: 1.2em;
 }
 </style>

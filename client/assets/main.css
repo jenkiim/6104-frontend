@@ -7,13 +7,36 @@
   --red: rgb(208, 67, 12);
   --base-bg: #f1f3f5;
   --signature: #2f11c3;
+  --signature-slightly-lighter: #5945be;
   --signature-lighter: #4d36c2;
   --signature-light: #9593c6;
   --signature-lightest: #a3a2c8;
-  --signature-blue: #0d6efd;
-  /* font-family: 'IBM Plex Serif', serif; */
+  --signature-blue: #6c9dd3;
+  --signature-blue-light: #6aa8c0;
+  --signature-purple: #9c6cd3;
   font-family: 'Work Sans', sans-serif;
-  /* font-family: 'Roboto', sans-serif; */
+}
+
+h1 {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+h3 {
+  font-weight: 500;
+  font-style: italic;
+  margin: 0;
+}
+
+button.reply-btn {
+  background-color: rgb(217, 217, 217);
+  color: black;
+  text-align: left;
+  height: 60%;
+}
+
+button.reply-btn:hover {
+  background-color: rgb(169, 169, 169);
 }
 
 button.btn-small {
@@ -27,6 +50,7 @@ button.btn-small:hover {
 button.button-error {
   color: white;
   background: var(--red);
+  border-radius: 3px;
 }
 
 button {
@@ -37,6 +61,7 @@ button {
   cursor: pointer;
   background-color: var(--signature);
   color: white;
+  display: inline-block;
 }
 
 button:hover {
@@ -62,4 +87,11 @@ a.button {
 
 .page-description {
   text-align: center;
+}
+
+.sort-filter {
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  margin: 0 auto;
 }

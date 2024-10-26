@@ -44,19 +44,23 @@ function navigateToAddResponse(id: string) {
 
 <template>
   <h1>{{ props.response.title }}</h1>
-  <p class="author">{{ props.response.author }}</p>
+  <h3 class="author">{{ props.response.author }}</h3>
   <p>{{ props.response.content }}</p>
   <div class="base">
-    <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
-    <div class="response-attributes">
-      <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
+    <section class="response">
+      <div class="response-attributes">
+        <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
+        <div class="upvote-reply">
+          <div class="btn-container">
+            <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">Reply</button>
+          </div>
+          <UpvotingComponent :responseId="props.response._id" />
+        </div>
+      </div>
       <menu class="buttons" v-if="props.response.author == currentUsername">
         <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
       </menu>
-    </div>
-    <div class="upvoting-container">
-      <UpvotingComponent :responseId="props.response._id" />
-    </div>
+    </section>
     <section class="responses" v-if="responsesToCurrent.length !== 0">
       <article v-for="response in responsesToCurrent" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
@@ -72,6 +76,8 @@ p {
 
 h1 {
   font-size: 1.5em;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
 .author {
@@ -98,6 +104,7 @@ menu {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 0.7em;
 }
 
 .buttons {
@@ -116,6 +123,21 @@ menu {
 .response-attributes {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.upvote-reply {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.response {
+  padding-bottom: 0.5em;
+}
+
+.btn-container {
+  display: flex;
   align-items: center;
 }
 </style>

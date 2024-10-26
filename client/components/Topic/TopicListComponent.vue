@@ -71,9 +71,9 @@ onBeforeMount(async () => {
 });
 
 const options = [
-  { display: "Newest", value: "newest" },
-  { display: "Engagement", value: "engagement" },
-  { display: "Random", value: "random" },
+  { display: "Newest ", value: "newest" },
+  { display: "Engagement ", value: "engagement" },
+  { display: "Random ", value: "random" },
 ];
 </script>
 
@@ -83,20 +83,21 @@ const options = [
     <CreateTopicForm @refreshTopics="getTopics(sort, undefined, filters)" />
   </section>
 
-  <LabelFilterDropDown @filterItems="handleFilterTopics" :topicOrResponse="'topic'" />
+  <section class="sort-filter flex-row">
+    <SortDropdown @sortItems="handleSortTopics" :sort-options="options" />
+    <LabelFilterDropDown @filterItems="handleFilterTopics" :topicOrResponse="'topic'" />
+  </section>
 
-  <SortDropdown @sortItems="handleSortTopics" :sort-options="options" />
-
-  <div class="row">
+  <section class="row">
     <h2 v-if="!searchText">Topics:</h2>
     <h2 v-else>Topics by {{ searchText }}:</h2>
     <SearchTopicForm @getTopicsByText="searchTopics" />
-  </div>
+  </section>
 
   <section class="topics" v-if="loaded && topics.length !== 0">
     <article v-for="topic in topics" :key="topic._id">
       <div @click="navigateToTopic(topic.title)">
-        <TopicComponent :topic="topic" @refreshTopics="getTopics" />
+        <TopicComponent :topic="topic" @refreshTopics="getTopics(sort, undefined, filters)" />
       </div>
     </article>
   </section>
@@ -133,8 +134,14 @@ article {
 
 .row {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   margin: 0 auto;
   max-width: 60em;
+}
+
+.flex-row {
+  flex-direction: row;
+  margin-top: 1em;
 }
 </style>

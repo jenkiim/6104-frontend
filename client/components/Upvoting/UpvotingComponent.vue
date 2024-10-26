@@ -31,7 +31,7 @@ const toggleDownvote = async () => {
   if (vote.value === "downvote") {
     // User clicked downvote again -> Unvote
     count.value++;
-    vote.value = "unvote";
+    vote.value = "none";
     await changeVote("unvote");
   } else {
     // Downvote the item
@@ -87,14 +87,14 @@ onBeforeMount(async () => {
 
 <template>
   <div class="voting-container">
-    <!-- Upvote Button -->
-    <button class="arrow" :class="{ active: vote === 'upvote' }" @click="toggleUpvote">▲</button>
+    <!-- Downvote Button -->
+    <button class="arrow downvote" :class="{ active: vote === 'downvote' }" @click="toggleDownvote">▼</button>
 
     <!-- Display the vote count -->
     <div v-if="!props.stripped" class="vote-count">{{ count }}</div>
 
-    <!-- Downvote Button -->
-    <button class="arrow" :class="{ active: vote === 'downvote' }" @click="toggleDownvote">▼</button>
+    <!-- Upvote Button -->
+    <button class="arrow upvote" :class="{ active: vote === 'upvote' }" @click="toggleUpvote">▲</button>
   </div>
 </template>
 
@@ -102,24 +102,33 @@ onBeforeMount(async () => {
 .voting-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center the container */
+  border-radius: 8px; /* Rounded border for the entire container */
+  padding: 5px; /* Padding inside the container */
 }
 
 .arrow {
   background: none;
-  border: black 1px solid;
-  border-radius: 5px;
+  border: 1px solid grey; /* Smaller border around arrows */
+  border-radius: 5px; /* Rounded corners */
   cursor: pointer;
-  color: black;
-  padding: 2px 4px;
+  color: grey; /* Default color */
+  font-size: 24px; /* Arrow size */
+  padding: 8px; /* Space around arrows */
+  transition:
+    background-color 0.3s,
+    color 0.3s; /* Smooth transitions */
+  min-width: 40px; /* Fixed width to prevent shifting */
 }
 
-button.active + .vote-count {
-  color: green;
+.arrow.active {
+  color: indigo; /* Change color when active */
 }
 
 .vote-count {
   font-size: 18px;
-  margin: 10px 0;
+  margin: 0 10px; /* Margin between count and arrows */
+  text-align: center; /* Center text */
+  min-width: 30px; /* Fixed width for vote count */
 }
 </style>

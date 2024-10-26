@@ -5,27 +5,8 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 
 const { isLoggedIn } = storeToRefs(useUserStore());
-
 const props = defineProps(["topicTitle"]);
-// const title = ref("");
-// const content = ref("");
 const emit = defineEmits(["refreshResponses"]);
-
-// const addResponse = async (title: string, content: string) => {
-//   try {
-//     await fetchy(`/api/responses/response/${props.id}`, "POST", { body: { title: title, content: content } });
-//   } catch (e) {
-//     return;
-//   }
-//   emit("refreshResponses");
-//   // void router.push({ name: "TopicView", params: { id: props.id } }); //////// will error if the target isn't a topic
-//   router.go(-1);
-// };
-
-// const emptyForm = () => {
-//   title.value = "";
-//   content.value = "";
-// };
 
 const addResponse = () => {
   emit("refreshResponses");
@@ -38,15 +19,17 @@ const navigateToUpdateSide = () => {
 </script>
 
 <template>
-  <section v-if="isLoggedIn">
-    <h2>Want to update your response?</h2>
-    <button @click="navigateToUpdateSide">Update Side</button>
-    <h2>Respond to this topic!</h2>
-    <CreateResponseForm :topic="props.topicTitle" @refreshResponses="addResponse" />
-  </section>
-  <section v-else>
-    <p>You must be logged in to respond to this topic.</p>
-  </section>
+  <div class="container">
+    <section v-if="isLoggedIn">
+      <h2>Want to update your response?</h2>
+      <button @click="navigateToUpdateSide">Update Side</button>
+      <h2>Respond to this topic!</h2>
+      <CreateResponseForm :topic="props.topicTitle" @refreshResponses="addResponse" />
+    </section>
+    <section v-else>
+      <p>You must be logged in to respond to this topic.</p>
+    </section>
+  </div>
 </template>
 
 <style scoped>
@@ -97,10 +80,10 @@ menu {
   align-items: center;
 }
 
-.timestamp {
+.container {
   display: flex;
-  justify-content: flex-end;
-  font-size: 0.9em;
-  font-style: italic;
+  flex-direction: column;
+  gap: 1em;
+  margin: 2em 10em;
 }
 </style>

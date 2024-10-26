@@ -65,7 +65,7 @@ onBeforeMount(async () => {
     <div class="selected-filters">
       <span v-for="filter in selectedFilters" :key="filter" class="filter-tag">
         {{ filter }}
-        <button @click="removeSelectedFilter(filter)">X</button>
+        <button class="delete-btn" @click="removeSelectedFilter(filter)">X</button>
       </span>
     </div>
   </div>
@@ -137,9 +137,14 @@ li.disabled {
 }
 
 .filter-tag {
-  background-color: #007bff;
+  background-color: var(--signature-slightly-lighter);
   color: white;
-  padding: 4px 8px;
+  padding: 6px 16px;
   border-radius: 4px;
+}
+
+.delete-btn {
+  padding: 0;
+  background-color: var(--signature-slightly-lighter);
 }
 </style>

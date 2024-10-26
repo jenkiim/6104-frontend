@@ -18,11 +18,11 @@ const sideOptions = ref<Array<Record<string, string>>>([]);
 const sidesLoaded = computed(() => sideOptions.value.length > 0);
 
 const sortOptions = [
-  { display: "Newest", value: "newest" },
-  { display: "Random", value: "random" },
-  { display: "Upvotes", value: "upvotes" },
-  { display: "Downvotes", value: "downvotes" },
-  { display: "Controversial", value: "controversial" },
+  { display: "Newest ", value: "newest" },
+  { display: "Random ", value: "random" },
+  { display: "Upvotes ", value: "upvotes" },
+  { display: "Downvotes ", value: "downvotes" },
+  { display: "Controversial ", value: "controversial" },
 ];
 
 const getResponses = async (topic: string, sort: string, selectedFilters?: string[], degree?: string) => {
@@ -30,7 +30,7 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
   let query: Record<string, string> = { sort };
   let responseSortResults: Record<string, string>[];
   try {
-    const apiResponseSortResults = await fetchy(apiUrl, "GET", { query });
+    const apiResponseSortResults = await fetchy(apiUrl, "GET", { query, alert: false });
     responseSortResults = apiResponseSortResults.responses;
   } catch (_) {
     return;
@@ -42,7 +42,7 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
       const filter = selectedFilters[index];
       let responseFilterResults = [];
       try {
-        responseFilterResults = await fetchy(`/api/responses/topic/${topic}/label/${filter}`, "GET");
+        responseFilterResults = await fetchy(`/api/responses/topic/${topic}/label/${filter}`, "GET", { alert: false });
       } catch (_) {
         return;
       }
@@ -55,7 +55,7 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
     const idsToInclude = new Set();
     for (const response of responseSortResults) {
       try {
-        const responseDegree = await fetchy(`/api/responses/response/${response._id}/degree`, "GET");
+        const responseDegree = await fetchy(`/api/responses/response/${response._id}/degree`, "GET", { alert: false });
         if (responseDegree.side === degree) {
           idsToInclude.add(response._id.toString());
         }
@@ -70,17 +70,23 @@ const getResponses = async (topic: string, sort: string, selectedFilters?: strin
 
 const handleSortResponses = async (option: string) => {
   sort.value = option;
+  loaded.value = false;
   await getResponses(props.topic, option, filters.value, degree.value);
+  loaded.value = true;
 };
 
 const handleFilterResponses = async (selectedFilters: string[]) => {
   filters.value = selectedFilters;
+  loaded.value = false;
   await getResponses(props.topic, sort.value, selectedFilters, degree.value);
+  loaded.value = true;
 };
 
 const handleDegree = async (newDegree: string) => {
   degree.value = newDegree;
+  loaded.value = false;
   await getResponses(props.topic, sort.value, filters.value, newDegree);
+  loaded.value = true;
 };
 
 onBeforeMount(async () => {
@@ -107,8 +113,10 @@ onBeforeMount(async () => {
   <div v-if="sidesLoaded">
     <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" :addOrFilter="'filter'" :options="sideOptions" @updateDegree="handleDegree" />
   </div>
-  <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
-  <SortDropdown :sortOptions="sortOptions" @sortItems="handleSortResponses" />
+  <div class="sort-filter">
+    <SortDropdown :sortOptions="sortOptions" @sortItems="handleSortResponses" />
+    <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
+  </div>
   <div class="row">
     <h2>Responses:</h2>
   </div>

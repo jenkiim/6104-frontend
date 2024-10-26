@@ -33,10 +33,14 @@ const onUpdateDegree = async (newDegree: string) => {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 1em;
+  align-items: center;
 }
 
 .opinion-button {
   text-align: center;
+  width: auto;
+  max-width: 12.5%;
 }
 
 input[type="radio"] {
@@ -49,6 +53,8 @@ input[type="radio"] + label {
   border-radius: 5px;
   cursor: pointer;
   user-select: none;
+  display: block;
+  word-break: break-all;
 }
 
 input[type="radio"] + label:hover {
@@ -56,12 +62,11 @@ input[type="radio"] + label:hover {
 }
 
 input[type="radio"]:checked + label {
-  background-color: #007bff;
+  background-color: var(--signature-light);
   color: white;
-  border-color: #007bff;
 }
 
 input[type="radio"]:checked + label:hover {
-  background-color: #0056b3;
+  background-color: var(--signature-lighter);
 }
 </style>

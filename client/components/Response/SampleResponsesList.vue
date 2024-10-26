@@ -60,8 +60,12 @@ onBeforeMount(async () => {
 </script>
 
 <template>
-  <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
-  <button @click="shuffleResponses">Shuffle Responses</button>
+  <div class="sort-filter-container">
+    <div class="sort-filter">
+      <button @click="shuffleResponses">Shuffle</button>
+      <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
+    </div>
+  </div>
   <div class="row">
     <h2>Responses:</h2>
   </div>
@@ -106,5 +110,10 @@ article {
   justify-content: space-between;
   margin: 0 auto;
   max-width: 60em;
+}
+
+.sort-filter-container {
+  display: flex;
+  align-items: center;
 }
 </style>

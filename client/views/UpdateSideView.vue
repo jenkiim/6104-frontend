@@ -11,6 +11,10 @@ const props = defineProps(["topicTitle"]);
 </template>
 
 <style scoped>
+main {
+  margin: 5em 10em;
+}
+
 h1 {
   text-align: center;
 }

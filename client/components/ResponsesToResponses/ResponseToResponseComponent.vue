@@ -43,15 +43,15 @@ function navigateToAddResponse(id: string) {
 <template>
   <div class="repsonseToResponse">
     <h1>{{ props.response.title }}</h1>
-    <p class="author">{{ props.response.author }}</p>
+    <h3 class="author">{{ props.response.author }}</h3>
     <p>{{ props.response.content }}</p>
     <div class="base">
-      <button class="btn-small pure-button" @click="navigateToAddResponse(props.response._id)">Add Response</button>
-      <menu v-if="props.response.author == currentUsername">
-        <li><button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button></li>
-      </menu>
+      <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">Reply</button>
+      <UpvotingComponent :responseId="props.response._id" />
     </div>
-    <UpvotingComponent :responseId="props.response._id" />
+    <div class="delete-btn-container" v-if="props.response.author == currentUsername">
+      <button class="button-error btn-small pure-button" @click="deleteResponse">Delete</button>
+    </div>
     <section class="responses" v-if="responses.length !== 0">
       <article v-for="response in responses" :key="response._id">
         <ResponseToResponseComponent :response="response" @refreshResponses="getResponses(props.response._id)" />
@@ -67,6 +67,8 @@ p {
 
 h1 {
   font-size: 1.5em;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
 
 .author {
@@ -100,6 +102,16 @@ menu {
 }
 
 .repsonseToResponse {
+  border-top: 1px solid rgb(117, 117, 117);
+  padding-top: 1em;
   padding-left: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.delete-btn-container {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

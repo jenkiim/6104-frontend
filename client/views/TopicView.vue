@@ -59,10 +59,9 @@ onBeforeMount(async () => {
 
 <style scoped>
 main {
-  margin: 0 10%;
-  display: flex;
-  flex-direction: column;
+  margin: 2em 10em;
 }
+
 h1 {
   text-align: center;
 }

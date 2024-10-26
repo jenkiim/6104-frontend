@@ -3,7 +3,7 @@ import { useUserStore } from "@/stores/user";
 import { storeToRefs } from "pinia";
 import { defineProps, onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
-import AddLabelInline from "../Label/AddLabelInline.vue";
+import AddLabelInline from "./AddLabelInline.vue";
 
 const props = defineProps(["item", "topicOrResponse"]);
 const labels = ref<string[]>([]);
@@ -26,7 +26,8 @@ const getLabels = async (title: string, id: string) => {
 };
 
 const removeLabel = async (index: number) => {
-  const apiUrl = `/api/label/${labels.value[index]}/remove/${props.topicOrResponse}/${props.item.title}`;
+  const itemTitle = props.topicOrResponse === "topic" ? props.item.title : props.item._id;
+  const apiUrl = `/api/label/${labels.value[index]}/remove/${props.topicOrResponse}/${itemTitle}`;
   try {
     await fetchy(apiUrl, "PATCH");
   } catch {
@@ -43,38 +44,40 @@ onBeforeMount(async () => {
 
 <template>
   <div class="label-list">
-    <span v-for="(label, index) in labels" :key="label" class="label" @click.stop="">
+    <span v-for="(label, index) in labels" :key="label" :class="['label', props.topicOrResponse === 'topic' ? 'blue-label' : 'purple-label']" @click.stop="">
       {{ label }}
-      <button v-if="showDeleteButton" @click="removeLabel(index)" class="delete-btn">x</button>
+      <button v-if="showDeleteButton" @click="removeLabel(index)" :class="['delete-btn', props.topicOrResponse === 'topic' ? 'blue-label' : 'purple-label']">x</button>
     </span>
     <AddLabelInline v-if="showDeleteButton" :item="props.item" :topicOrResponse="props.topicOrResponse" @updateLabels="getLabels(props.item.title, props.item._id)" @click.stop="" />
   </div>
 </template>
 
 <style scoped>
-.label-container {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  background-color: #f9f9f9;
-}
-
-h3 {
-  margin-bottom: 10px;
-  font-size: 1.5em;
-}
-
 .label-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px; /* Space between labels */
+  gap: 8px;
+  height: 80%;
 }
 
 .label {
-  background-color: #007bff; /* Tag background color */
-  color: white; /* Text color */
-  padding: 8px 12px; /* Padding for labels */
-  border-radius: 20px; /* Rounded edges */
-  font-size: 0.9em; /* Tag font size */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+}
+
+.blue-label {
+  background-color: var(--signature-blue);
+}
+
+.purple-label {
+  background-color: var(--signature-purple);
+}
+
+.delete-btn {
+  cursor: pointer;
+  padding: 0 0.2em;
+  font-size: 1.2em;
 }
 </style>

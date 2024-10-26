@@ -3,7 +3,7 @@ import { defineProps, ref } from "vue";
 
 const isDropdownOpen = ref(false);
 const props = defineProps(["sortOptions"]);
-const currentSort = ref("Sort Topics");
+const currentSort = ref("Sort Topics ");
 
 const toggleDropdown = () => {
   isDropdownOpen.value = !isDropdownOpen.value;
@@ -36,19 +36,6 @@ const selectSortOption = (option: string) => {
 .sort-dropdown {
   position: relative;
   display: inline-block;
-}
-
-/* .sort-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-} */
-
-.sort-button span {
-  margin-left: 10px;
 }
 
 .dropdown-menu {
