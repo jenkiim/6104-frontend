@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, ref } from "vue";
 
-const props = defineProps(["sideLeft", "sideRight", "addOrFilter", "options"]);
+const props = defineProps(["sideLeft", "sideRight", "addOrFilter", "options", "currentDegree"]);
 const emit = defineEmits(["updateDegree"]);
-const degree = ref("");
+const degree = ref(props.currentDegree);
 
 const onUpdateDegree = async (newDegree: string) => {
   if (props.addOrFilter === "filter") {

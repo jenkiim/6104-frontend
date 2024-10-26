@@ -1,18 +1,21 @@
 <script setup lang="ts">
 import router from "@/router";
+import { storeToRefs } from "pinia";
 import { computed, onBeforeMount, ref } from "vue";
+import { useUserStore } from "../../stores/user";
 import { fetchy } from "../../utils/fetchy";
 import OpinionDegreeSlider from "./OpinionDegreeSlider.vue";
 
+const { currentUsername } = storeToRefs(useUserStore());
 const props = defineProps(["topicTitle"]);
 const degree = ref("");
 const sideLeft = ref("");
 const sideRight = ref("");
 const sideOptions = ref<Array<Record<string, string>>>([]);
-const sidesLoaded = computed(() => sideOptions.value.length > 0);
+const sidesLoaded = computed(() => sideOptions.value.length > 0 && degree.value !== "");
 
 /// set the sides of the topic
-onBeforeMount(() => {
+onBeforeMount(async () => {
   const regex = /(.+)\s+vs\.\s+(.+)/i;
   const match = props.topicTitle.match(regex);
   sideLeft.value = match[1].trim();
@@ -26,6 +29,14 @@ onBeforeMount(() => {
     { display: `Prefer ${sideRight.value}`, value: "Agree" },
     { display: `Strongly Prefer ${sideRight.value}`, value: "Strongly Agree" },
   ];
+  let currentOption;
+  const query: Record<string, string> = { user: currentUsername.value, topic: props.topicTitle };
+  try {
+    currentOption = await fetchy(`/api/side`, "GET", { query });
+  } catch (_) {
+    return;
+  }
+  degree.value = currentOption[0].degree;
 });
 
 const createSide = async (topicTitle: string, newside: string) => {
@@ -59,7 +70,7 @@ const emptyForm = () => {
     <h1>What side are you on?</h1>
     <h2>{{ props.topicTitle }}</h2>
     <div v-if="sidesLoaded">
-      <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" @updateDegree="setDegree" :addOrFilter="'add'" :options="sideOptions" />
+      <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" @updateDegree="setDegree" :addOrFilter="'add'" :options="sideOptions" :currentDegree="degree" />
     </div>
     <button type="submit" class="pure-button-primary pure-button">Decided!</button>
     <h2>Undecided? Click here!</h2>
