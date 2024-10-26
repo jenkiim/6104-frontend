@@ -41,7 +41,11 @@ export default class SideingConcept {
   }
 
   async getSideByUserAndItem(user: ObjectId, item: ObjectId) {
-    const side = await this.sides.readOne({ user, item });
+    let side = await this.sides.readOne({ user, item });
+    if (!side) {
+      await this.create(user, item, OpinionDegree.Undecided);
+      side = await this.sides.readOne({ user, item });
+    }
     if (!side) {
       throw new NotFoundError(`Side for user ${user} and item ${item} not found!`);
     }
@@ -57,6 +61,14 @@ export default class SideingConcept {
       await this.sides.partialUpdateOne({ user, item }, { degree: await this.assertDegree(newside) });
     }
     return { msg: `Side successfully updated!` };
+  }
+
+  async userHasSide(user: ObjectId, item: ObjectId) {
+    const side = await this.sides.readOne({ user, item });
+    if (!side) {
+      return false;
+    }
+    return true;
   }
 
   async assertUserHasSide(user: ObjectId, item: ObjectId) {

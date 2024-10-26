@@ -259,7 +259,9 @@ class Routes {
   async updateDegreeOfSide(session: SessionDoc, topic: string, newside?: string) {
     const user = Sessioning.getUser(session);
     const topicId = (await Topicing.getTopicByTitle(topic))._id;
-    await Sideing.assertUserHasSide(user, topicId);
+    if (!(await Sideing.userHasSide(user, topicId))) {
+      await Sideing.create(user, topicId, "Undecided");
+    }
     return await Sideing.update(user, topicId, newside);
   }
 
