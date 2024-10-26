@@ -44,11 +44,11 @@ onBeforeMount(async () => {
 
 <template>
   <div class="label-list">
-    <span v-for="(label, index) in labels" :key="label" class="label">
+    <span v-for="(label, index) in labels" :key="label" class="label" @click.stop="">
       {{ label }}
       <button v-if="showDeleteButton" @click="removeLabel(index)" class="delete-btn">x</button>
     </span>
-    <AddLabelInline v-if="showDeleteButton" :item="props.item" :topicOrResponse="props.topicOrResponse" @updateLabels="getLabels(props.item.title, props.item._id)" />
+    <AddLabelInline v-if="showDeleteButton" :item="props.item" :topicOrResponse="props.topicOrResponse" @updateLabels="getLabels(props.item.title, props.item._id)" @click.stop="" />
   </div>
 </template>
 
