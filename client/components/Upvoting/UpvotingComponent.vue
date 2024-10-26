@@ -2,7 +2,7 @@
 import { fetchy } from "@/utils/fetchy";
 import { defineProps, onBeforeMount, ref } from "vue";
 
-const props = defineProps(["responseId"]);
+const props = defineProps(["responseId", "stripped"]);
 // const emit = defineEmits(["updateDegree"]);
 const vote = ref("");
 const count = ref(0);
@@ -89,7 +89,7 @@ onBeforeMount(async () => {
     <button :class="{ active: vote === 'upvote' }" @click="toggleUpvote">▲</button>
 
     <!-- Display the vote count -->
-    <div class="vote-count">{{ count }}</div>
+    <div v-if="!props.stripped" class="vote-count">{{ count }}</div>
 
     <!-- Downvote Button -->
     <button :class="{ active: vote === 'downvote' }" @click="toggleDownvote">▼</button>

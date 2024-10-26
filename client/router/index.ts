@@ -6,6 +6,7 @@ import AddResponseToResponseView from "../views/AddResponseToResponseView.vue";
 import AddResponseToTopicView from "../views/AddResponseToTopicView.vue";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
+import NonBiasedSamplesView from "../views/NonBiasedSamplesView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
 import TopicView from "../views/TopicView.vue";
@@ -24,6 +25,12 @@ const router = createRouter({
       name: "Settings",
       component: SettingView,
       meta: { requiresAuth: true },
+    },
+    {
+      path: "/samples",
+      name: "NonBiasedSamples",
+      component: NonBiasedSamplesView,
+      props: true,
     },
     {
       path: "/topic/:title",

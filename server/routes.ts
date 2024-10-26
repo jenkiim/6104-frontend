@@ -92,6 +92,13 @@ class Routes {
     return Responses.topics(topics);
   }
 
+  @Router.get("/topics/byId")
+  @Router.validate(z.object({ id: z.string() }))
+  async getTopicById(id: string) {
+    const topic = await Topicing.getTopicById(new ObjectId(id));
+    return Responses.topic(topic);
+  }
+
   /**
    * @param title The title of the topic. Must not be empty.
    * @param description The description of the topic. Can be empty.
@@ -489,7 +496,7 @@ class Routes {
   }
 
   @Router.get("/responses/topic/:topic/label/:label")
-  async getResponsesByLabel(topic: string, label: string) {
+  async getResponsesToTopicByLabel(topic: string, label: string) {
     // get all responses to the given topic with the given label
     const topicid = (await Topicing.getTopicByTitle(topic))._id;
     const responses = await RespondingToTopic.getByTarget(new ObjectId(topicid));
@@ -497,6 +504,13 @@ class Routes {
     const labeledResponses = await ResponseLabeling.filterByLabelFromGiven(responseIds, label);
     const finalResponses = await RespondingToTopic.idsToResponses(labeledResponses); // translates ids to actual responses
     return { msg: `Found all responses to topic ${topic} labeled with ${label}`, responses: finalResponses };
+  }
+
+  @Router.get("/responses/topic/label/:label")
+  async getResponsesByLabel(label: string) {
+    const labeledResponses = await ResponseLabeling.getItems(label);
+    const finalResponses = await RespondingToTopic.idsToResponses(labeledResponses.items);
+    return { msg: `Found all responses to topics labeled with ${label}`, responses: await Responses.responsesToTopic(finalResponses) };
   }
 
   //// Get all responses on given topic with given opinion degree for home page
