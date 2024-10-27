@@ -11,6 +11,7 @@ import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
 import TopicView from "../views/TopicView.vue";
 import UpdateSideView from "../views/UpdateSideView.vue";
+import UserView from "../views/UserView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -62,6 +63,20 @@ const router = createRouter({
       meta: { requiresAuth: true },
       props: true,
     },
+    {
+      path: "/user/:username",
+      name: "User",
+      component: UserView,
+      meta: { requiresAuth: true },
+      props: true,
+    },
+    // {
+    //   path: "/response/:id",
+    //   name: "ResponseView",
+    //   component: ResponseView,
+    //   meta: { requiresAuth: true },
+    //   props: true,
+    // },
     {
       path: "/login",
       name: "Login",
