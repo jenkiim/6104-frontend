@@ -78,7 +78,7 @@ p {
 
 .labels {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   margin-bottom: 1em;
 }
 </style>
