@@ -17,18 +17,6 @@ const getResponses = async () => {
   } catch (_) {
     return;
   }
-  // get responses to responses
-  apiUrl = `/api/responses/response`;
-  let responsesToResponses: Record<string, string>[];
-  try {
-    responsesToResponses = await fetchy(apiUrl, "GET", { query, alert: false });
-  } catch (_) {
-    return;
-  }
-  responseResults = responseResults.concat(responsesToResponses);
-  responseResults
-    .map((response) => new Date(response.dateCreated).getTime()) // Convert each date string to a timestamp
-    .sort((a, b) => a - b);
   responses.value = responseResults;
 };
 

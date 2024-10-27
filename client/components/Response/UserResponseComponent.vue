@@ -11,6 +11,7 @@ const props = defineProps(["response"]);
 const emit = defineEmits(["refreshResponses"]);
 const { currentUsername } = storeToRefs(useUserStore());
 const responsesToCurrent = ref<Array<Record<string, string>>>([]);
+const side = ref("");
 
 const deleteResponse = async () => {
   try {
@@ -32,8 +33,23 @@ const getResponses = async (targetId: string) => {
   responsesToCurrent.value = responseResults;
 };
 
+const getSide = async () => {
+  const url = `/api/responses/response/${props.response._id}/degree`;
+  let sideResult;
+  try {
+    sideResult = await fetchy(url, "GET", { alert: false });
+    console.log("sideResult", sideResult);
+  } catch (_) {
+    return;
+  }
+  console.log(sideResult);
+  side.value = sideResult.side;
+};
+
 onBeforeMount(async () => {
   await getResponses(props.response._id);
+  console.log("what");
+  await getSide();
 });
 
 const navigateToTopic = (title: string) => {
@@ -42,7 +58,10 @@ const navigateToTopic = (title: string) => {
 </script>
 
 <template>
-  <button class="topic" @click="navigateToTopic(props.response.issue)">{{ props.response.issue }}</button>
+  <div class="side">
+    <button class="topic" @click="navigateToTopic(props.response.issue)">{{ props.response.issue }}</button>
+    <h4><span class="not-bold">Side:</span> {{ side }}</h4>
+  </div>
   <h1>{{ props.response.title }}</h1>
   <p>{{ props.response.content }}</p>
   <div class="base">
@@ -69,6 +88,20 @@ const navigateToTopic = (title: string) => {
   text-align: left;
   width: 30%;
   font-size: 1.1em;
+}
+
+.side {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.not-bold {
+  font-weight: normal;
+}
+
+h4 {
+  margin: 0;
 }
 
 .topic:hover {
