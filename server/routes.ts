@@ -288,15 +288,6 @@ class Routes {
     return { msg: created.msg, response: await Responses.topicLabel(created.label) };
   }
 
-  // @Router.delete("/label/topic/:title")
-  // async deleteTopicLabel(session: SessionDoc, title: string) {
-  //   // delete topic label with given id
-  //   const user = Sessioning.getUser(session);
-  //   const label = await TopicLabeling.getLabelByTitle(title);
-  //   await TopicLabeling.assertAuthorIsUser(title, user);
-  //   return TopicLabeling.delete(label._id);
-  // }
-
   @Router.patch("/label/:label/add/topic/:topic")
   async addLabelToTopic(session: SessionDoc, topic: string, label: string) {
     // attach given label (unique so get label object from it) to the given topic
@@ -340,15 +331,6 @@ class Routes {
     const created = await ResponseLabeling.create(user, label);
     return { msg: created.msg, response: await Responses.responseLabel(created.label) };
   }
-
-  // @Router.delete("/label/response/:title")
-  // async deleteResponseLabel(session: SessionDoc, title: string) {
-  //   // delete response label with given id
-  //   const user = Sessioning.getUser(session);
-  //   const label = await ResponseLabeling.getLabelByTitle(title);
-  //   await ResponseLabeling.assertAuthorIsUser(title, user);
-  //   return ResponseLabeling.delete(label._id);
-  // }
 
   @Router.patch("/label/:label/add/response/:id")
   async addLabelToResponse(session: SessionDoc, label: string, id: string) {
@@ -459,7 +441,6 @@ class Routes {
       title = (await RespondingToResponse.getById(oid)).title;
     }
     const vote = await Upvoting.getVote(user, oid);
-    // return { msg: `Your vote to response with title ${title} and id ${id} is ${vote}`, vote: vote };
     return vote;
   }
 

@@ -111,7 +111,7 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="sidesLoaded">
-    <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" :addOrFilter="'filter'" :options="sideOptions" @updateDegree="handleDegree" />
+    <OpinionDegreeSlider :sideLeft="sideLeft" :sideRight="sideRight" :addOrFilter="'filter'" :topic="props.topic" :options="sideOptions" @updateDegree="handleDegree" />
   </div>
   <div class="sort-filter">
     <SortDropdown :sortOptions="sortOptions" @sortItems="handleSortResponses" />

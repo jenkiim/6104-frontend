@@ -46,7 +46,7 @@ const emptyForm = () => {
   <form @submit.prevent="createTopic(title, description)">
     <label for="title">Topic Contents: <span class="required">**Must be in the format X vs. Y**</span></label>
     <input id="title" v-model="title" placeholder="Create a topic! Format: X vs. Y" required pattern="\S+.*\S*\s+vs\.\s+\S+.*\S*" title="Please enter in the format: X vs. Y" maxlength="70" />
-    <textarea id="description" v-model="description" placeholder="What is the description of your topic?" required maxlength="200"> </textarea>
+    <textarea id="description" v-model="description" placeholder="What is the description of your topic?" required maxlength="1000"> </textarea>
     <span v-for="(label, index) in labels" :key="label" class="label">
       {{ label }}
       <button @click="removeLabel(index)" class="delete-btn">x</button>
