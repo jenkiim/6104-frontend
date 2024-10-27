@@ -70,13 +70,6 @@ const router = createRouter({
       meta: { requiresAuth: true },
       props: true,
     },
-    // {
-    //   path: "/response/:id",
-    //   name: "ResponseView",
-    //   component: ResponseView,
-    //   meta: { requiresAuth: true },
-    //   props: true,
-    // },
     {
       path: "/login",
       name: "Login",
