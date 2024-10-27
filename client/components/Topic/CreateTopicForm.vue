@@ -86,4 +86,13 @@ textarea {
 .required {
   color: rgb(240, 65, 65);
 }
+
+.delete-btn {
+  padding: 0 0.5em;
+  background-color: var(--signature-slightly-lighter);
+}
+
+.delete-btn:hover {
+  background-color: var(--signature-light);
+}
 </style>

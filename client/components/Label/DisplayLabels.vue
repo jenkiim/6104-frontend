@@ -57,7 +57,8 @@ onBeforeMount(async () => {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  height: 80%;
+  align-items: center;
+  /* Remove height if you want it to fit content */
 }
 
 .label {
@@ -65,6 +66,9 @@ onBeforeMount(async () => {
   padding: 8px 12px;
   border-radius: 20px;
   font-size: 0.9em;
+  display: inline-flex; /* Change to inline-flex to fit content */
+  align-items: center; /* Center vertically */
+  height: 17px;
 }
 
 .blue-label {

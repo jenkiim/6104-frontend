@@ -97,11 +97,25 @@ h3 {
 }
 
 .label {
-  background-color: #007bff;
+  background-color: #007bff; /* Standard label color */
   color: white;
   padding: 5px 10px;
   margin-right: 10px;
   border-radius: 5px;
+  transition: background-color 0.3s ease; /* Transition for hover effect */
+}
+
+.label:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.selected-label {
+  background-color: #ffc107; /* Highlight color for selected labels */
+  color: #212529; /* Darker text color for contrast */
+  padding: 5px 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-weight: bold; /* Bold text for emphasis */
 }
 
 .delete-button {

@@ -23,7 +23,7 @@ const getTopics = async (sort: string, search?: string, selectedFilters?: string
   let query: Record<string, string> = search !== undefined ? { sort, search } : { sort };
   let topicSortResults;
   try {
-    topicSortResults = await fetchy("/api/topics/sort", "GET", { query });
+    topicSortResults = await fetchy("/api/topics/sort", "GET", { query, alert: false });
   } catch (_) {
     return;
   }
@@ -34,7 +34,7 @@ const getTopics = async (sort: string, search?: string, selectedFilters?: string
       const filter = selectedFilters[index];
       let topicFilterResults = [];
       try {
-        topicFilterResults = await fetchy(`/api/topics/label/${filter}`, "GET");
+        topicFilterResults = await fetchy(`/api/topics/label/${filter}`, "GET", { alert: false });
       } catch (_) {
         return;
       }

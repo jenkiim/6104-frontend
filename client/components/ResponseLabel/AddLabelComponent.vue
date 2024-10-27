@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { fetchy } from "../../utils/fetchy";
 
 const newLabel = ref("");
 const allLabels = ref<string[]>([]);
 const selectedLabels = ref<string[]>([]);
+const searchQuery = ref("");
+const currentPage = ref(1);
+const labelsPerPage = 10; // Number of labels to show per page
 const emit = defineEmits(["updateLabels"]);
 
 const getLabels = async () => {
@@ -45,6 +48,26 @@ const updateLabels = () => {
   emit("updateLabels", selectedLabels.value);
 };
 
+// Computed property for filtered labels based on search query
+const filteredLabels = computed(() => {
+  return allLabels.value.filter((label) => label.toLowerCase().includes(searchQuery.value.toLowerCase()));
+});
+
+// Pagination computed properties
+const totalPages = computed(() => {
+  return Math.ceil(filteredLabels.value.length / labelsPerPage);
+});
+
+const displayedLabels = computed(() => {
+  const start = (currentPage.value - 1) * labelsPerPage;
+  return filteredLabels.value.slice(start, start + labelsPerPage);
+});
+
+// Change current page
+const changePage = (page: number) => {
+  currentPage.value = page;
+};
+
 onBeforeMount(async () => {
   await getLabels();
 });
@@ -53,12 +76,26 @@ onBeforeMount(async () => {
 <template>
   <div class="label-selector">
     <h3>Select Tags for Your Post</h3>
+
+    <div class="search-bar">
+      <input type="text" v-model="searchQuery" placeholder="Search labels..." />
+    </div>
+
     <div class="checkbox-group">
-      <div v-for="label in allLabels" :key="label" class="checkbox-item">
+      <div v-for="label in displayedLabels" :key="label" class="checkbox-item">
         <input type="checkbox" :id="label" :value="label" @change="toggleLabel(label)" />
         <label :for="label">{{ label }}</label>
       </div>
+      <div v-if="filteredLabels.length === 0" class="no-results">No results found</div>
     </div>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+      <button @click.prevent="changePage(currentPage - 1)" :disabled="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button @click.prevent="changePage(currentPage + 1)" :disabled="currentPage === totalPages">Next</button>
+    </div>
+
     <div class="new-label">
       <input type="text" v-model="newLabel" placeholder="Create a new label" maxlength="20" />
       <button @click.prevent="addLabel" class="add-button">Add</button>
@@ -79,6 +116,17 @@ h3 {
   font-size: 1.5em;
 }
 
+.search-bar {
+  margin-bottom: 15px;
+}
+
+.search-bar input {
+  padding: 5px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .checkbox-group {
   display: flex;
   flex-direction: column;
@@ -94,14 +142,11 @@ input[type="checkbox"] {
   margin-right: 10px;
 }
 
-.delete-button {
-  margin-left: 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 5px 8px;
-  border-radius: 5px;
-  cursor: pointer;
+.pagination {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .new-label {
@@ -127,13 +172,8 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.submit-button {
-  margin-top: 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
+.no-results {
+  color: red;
+  margin-top: 10px;
 }
 </style>
