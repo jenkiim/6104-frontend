@@ -34,68 +34,52 @@ const emptyForm = () => {
     <h1>Write a response!</h1>
     <form @submit.prevent="addResponse(title, content)">
       <input id="content" v-model="title" placeholder="Title" required maxlength="70" />
-      <input id="content" v-model="content" placeholder="Content" required maxlength="200" />
+      <textarea id="content" v-model="content" placeholder="Content" required maxlength="1000"></textarea>
       <div class="base">
-        <menu>
-          <li><button class="btn-small pure-button-primary pure-button" type="submit">Respond</button></li>
-        </menu>
+        <button type="submit">Respond</button>
       </div>
     </form>
   </main>
 </template>
 
 <style scoped>
-h1 {
-  text-align: center;
+main {
+  padding: 2em 8em;
 }
-
-p {
-  padding: 2em;
-}
-
 form {
   background-color: var(--base-bg);
+  border-radius: 1em;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  padding: 1em;
 }
 
 textarea {
   font-family: inherit;
   font-size: inherit;
   height: 6em;
+  padding: 0.5em;
   border-radius: 4px;
   resize: none;
 }
 
-p {
-  margin: 0em;
+input {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.5em;
+  resize: none;
 }
 
-.author {
-  font-weight: bold;
-  font-size: 1.2em;
+#title {
+  height: 1em;
 }
 
-menu {
-  list-style-type: none;
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-  padding: 0;
-  margin: 0;
+#content {
+  text-wrap: wrap;
 }
 
-.base {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.timestamp {
-  display: flex;
-  justify-content: flex-end;
-  font-size: 0.9em;
-  font-style: italic;
+.required {
+  color: rgb(240, 65, 65);
 }
 </style>

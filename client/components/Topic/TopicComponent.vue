@@ -21,7 +21,6 @@ const deleteTopic = async () => {
 <template>
   <div class="topic-container">
     <h1>{{ props.topic.title }}</h1>
-    <p class="author">{{ props.topic.author }}</p>
     <div class="base">
       <DisplayLabels :item="props.topic" :topicOrResponse="'topic'" />
       <menu v-if="props.topic.author == currentUsername">

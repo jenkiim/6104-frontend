@@ -42,8 +42,8 @@ function navigateToAddResponse(id: string) {
 
 <template>
   <div class="repsonseToResponse">
+    <h3 class="author">@{{ props.response.author }}</h3>
     <h1>{{ props.response.title }}</h1>
-    <h3 class="author">{{ props.response.author }}</h3>
     <p>{{ props.response.content }}</p>
     <div class="base">
       <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">
@@ -96,8 +96,9 @@ menu {
 
 .base {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: 1em;
 }
 
 .base article:only-child {

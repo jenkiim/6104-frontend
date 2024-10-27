@@ -43,8 +43,8 @@ function navigateToAddResponse(id: string) {
 </script>
 
 <template>
+  <h3 class="author">@{{ props.response.author }}</h3>
   <h1>{{ props.response.title }}</h1>
-  <h3 class="author">{{ props.response.author }}</h3>
   <p>{{ props.response.content }}</p>
   <div class="base">
     <section class="response">
