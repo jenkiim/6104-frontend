@@ -40,7 +40,10 @@ const navigateToTopic = (title: string) => {
     <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
     <div class="upvote-reply">
       <div class="btn-container">
-        <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">Reply</button>
+        <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">
+          Reply
+          <img src="../../assets/images/reply.png" alt="reply" />
+        </button>
       </div>
       <UpvotingComponent :responseId="props.response._id" :stripped="true" />
     </div>
@@ -123,5 +126,10 @@ menu {
   display: flex;
   flex-direction: row;
   gap: 1em;
+}
+
+.reply-btn img {
+  width: 16px;
+  height: 12px;
 }
 </style>

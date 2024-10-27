@@ -46,7 +46,10 @@ function navigateToAddResponse(id: string) {
     <h3 class="author">{{ props.response.author }}</h3>
     <p>{{ props.response.content }}</p>
     <div class="base">
-      <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">Reply</button>
+      <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">
+        Reply
+        <img src="../../assets/images/reply.png" alt="reply" />
+      </button>
       <UpvotingComponent :responseId="props.response._id" />
     </div>
     <div class="delete-btn-container" v-if="props.response.author == currentUsername">
@@ -113,5 +116,10 @@ menu {
 .delete-btn-container {
   display: flex;
   justify-content: flex-end;
+}
+
+.reply-btn img {
+  width: 16px;
+  height: 12px;
 }
 </style>

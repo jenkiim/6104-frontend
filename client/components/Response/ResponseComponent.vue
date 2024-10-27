@@ -52,7 +52,10 @@ function navigateToAddResponse(id: string) {
         <DisplayLabels :item="props.response" :topicOrResponse="'response'" />
         <div class="upvote-reply">
           <div class="btn-container">
-            <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">Reply</button>
+            <button class="reply-btn" @click="navigateToAddResponse(props.response._id)">
+              Reply
+              <img src="../../assets/images/reply.png" alt="reply" />
+            </button>
           </div>
           <UpvotingComponent :responseId="props.response._id" />
         </div>
@@ -139,5 +142,10 @@ menu {
 .btn-container {
   display: flex;
   align-items: center;
+}
+
+.btn-container img {
+  width: 16px;
+  height: 12px;
 }
 </style>

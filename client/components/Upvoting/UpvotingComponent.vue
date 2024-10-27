@@ -102,23 +102,24 @@ onBeforeMount(async () => {
 .voting-container {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the container */
-  border-radius: 8px; /* Rounded border for the entire container */
-  padding: 5px; /* Padding inside the container */
+  justify-content: center;
+  border-radius: 8px;
+  padding: 5px;
+  gap: 10px;
 }
 
 .arrow {
   background: none;
-  border: 1px solid grey; /* Smaller border around arrows */
-  border-radius: 5px; /* Rounded corners */
+  border: 1px solid grey;
+  border-radius: 5px;
   cursor: pointer;
-  color: grey; /* Default color */
-  font-size: 24px; /* Arrow size */
-  padding: 8px; /* Space around arrows */
+  color: grey;
+  font-size: 24px;
+  padding: 8px;
   transition:
     background-color 0.3s,
-    color 0.3s; /* Smooth transitions */
-  min-width: 40px; /* Fixed width to prevent shifting */
+    color 0.3s;
+  min-width: 40px;
 }
 
 .arrow.active {
@@ -127,7 +128,6 @@ onBeforeMount(async () => {
 
 .vote-count {
   font-size: 18px;
-  margin: 0 10px; /* Margin between count and arrows */
   text-align: center; /* Center text */
   min-width: 30px; /* Fixed width for vote count */
 }

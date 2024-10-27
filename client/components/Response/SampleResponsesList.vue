@@ -62,7 +62,10 @@ onBeforeMount(async () => {
 <template>
   <div class="sort-filter-container">
     <div class="sort-filter">
-      <button @click="shuffleResponses">Shuffle</button>
+      <button @click="shuffleResponses">
+        Shuffle
+        <img src="../../assets/images/shuffle.png" alt="reply" />
+      </button>
       <LabelFilterDropDown @filterItems="handleFilterResponses" :topicOrResponse="'response'" />
     </div>
   </div>
@@ -115,5 +118,10 @@ article {
 .sort-filter-container {
   display: flex;
   align-items: center;
+}
+
+.sort-filter img {
+  width: 16px;
+  height: 16px;
 }
 </style>

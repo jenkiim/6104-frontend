@@ -50,7 +50,8 @@ onBeforeMount(async () => {
   <div class="filter-container">
     <div class="filter-dropdown">
       <button @click="toggleDropdown" class="dropdown-button">
-        Filters <span v-if="selectedFilters.length">({{ selectedFilters.length }})</span>
+        Filter <span v-if="selectedFilters.length">({{ selectedFilters.length }})</span>
+        <img src="../../assets/images/filter-icon.png" alt="Filter icon" />
       </button>
       <div v-if="showDropdown" class="dropdown-options">
         <input type="text" v-model="searchQuery" placeholder="Search labels" class="search-input" />
@@ -72,6 +73,11 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped>
+.dropdown-button img {
+  width: 16px;
+  height: 16px;
+}
+
 .filter-container {
   display: flex;
   align-items: center;
