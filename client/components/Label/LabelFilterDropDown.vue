@@ -74,8 +74,8 @@ onBeforeMount(async () => {
 
 <style scoped>
 .dropdown-button img {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
 }
 
 .filter-container {

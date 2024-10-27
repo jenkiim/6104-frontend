@@ -96,7 +96,7 @@ const options = [
 
   <section class="topics" v-if="loaded && topics.length !== 0">
     <article v-for="topic in topics" :key="topic._id">
-      <div @click="navigateToTopic(topic.title)">
+      <div class="topic" @click="navigateToTopic(topic.title)">
         <TopicComponent :topic="topic" @refreshTopics="getTopics(sort, undefined, filters)" />
       </div>
     </article>
@@ -143,5 +143,17 @@ article {
 .flex-row {
   flex-direction: row;
   margin-top: 1em;
+}
+
+article {
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+article:hover {
+  background-color: rgb(204, 204, 204);
+  border-color: rgb(204, 204, 204);
 }
 </style>

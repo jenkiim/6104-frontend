@@ -117,7 +117,7 @@ article {
 
 .sort-filter-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .sort-filter img {
