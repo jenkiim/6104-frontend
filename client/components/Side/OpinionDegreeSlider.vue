@@ -74,7 +74,9 @@ input[type="radio"] + label {
   cursor: pointer;
   user-select: none;
   display: block;
-  word-break: break-all;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
 }
 
 input[type="radio"] + label:hover {
