@@ -114,6 +114,7 @@ menu {
   border-top: 1px solid rgb(117, 117, 117);
   padding-top: 1em;
   padding-left: 2em;
+  padding-bottom: 0.3em;
   display: flex;
   flex-direction: column;
   gap: 0.5em;
