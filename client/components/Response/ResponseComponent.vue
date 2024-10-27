@@ -48,7 +48,6 @@ function navigateToUserPage(username: string) {
 
 <template>
   <button class="author" @click="navigateToUserPage(props.response.author)">@{{ props.response.author }}</button>
-  <!-- <h3 class="author">@{{ props.response.author }}</h3> -->
   <h1>{{ props.response.title }}</h1>
   <p>{{ props.response.content }}</p>
   <div class="base">

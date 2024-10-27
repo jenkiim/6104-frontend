@@ -38,11 +38,16 @@ onBeforeMount(async () => {
 function navigateToAddResponse(id: string) {
   void router.push({ name: "AddResponseToResponsePage", params: { id: id } });
 }
+
+function navigateToUserPage(username: string) {
+  void router.push({ name: "User", params: { username: username } });
+}
 </script>
 
 <template>
   <div class="repsonseToResponse">
-    <h3 class="author">@{{ props.response.author }}</h3>
+    <!-- <h3 class="author">@{{ props.response.author }}</h3> -->
+    <button class="author" @click="navigateToUserPage(props.response.author)">@{{ props.response.author }}</button>
     <h1>{{ props.response.title }}</h1>
     <p>{{ props.response.content }}</p>
     <div class="base">
@@ -122,5 +127,26 @@ menu {
 .reply-btn img {
   width: 16px;
   height: 12px;
+}
+
+.author {
+  font-size: 1.2em;
+  font-weight: 500;
+  font-style: italic;
+  margin: 0;
+  display: block;
+  margin-block-start: 0.5em;
+  margin-block-end: 0em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  unicode-bidi: isolate;
+  background-color: var(--base-bg);
+  color: black;
+  padding: 0;
+  align-self: flex-start;
+}
+
+.author:hover {
+  color: grey;
 }
 </style>
